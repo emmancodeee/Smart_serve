@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Welcome</title>
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dash-line: #d7e0ec;
+      --dash-line-strong: #c7d5e8;
+      --dash-surface: #ffffff;
+      --dash-surface-soft: #f7faff;
+      --dash-surface-muted: #eef3f9;
+      --dash-ink: #10284d;
+      --dash-ink-soft: #5a6f8d;
+      --dash-shadow: 0 16px 42px rgba(16, 40, 77, 0.12);
+      --dash-shadow-soft: 0 10px 24px rgba(16, 40, 77, 0.06);
+    }
+
+    .dashboard-shell {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+    }
+
+    .dashboard-sidebar {
+      width: 100%;
+      background: linear-gradient(180deg, #17357f 0%, #2447a8 54%, #315fda 100%);
+    }
+
+    .dashboard-main {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .dashboard-header-inner,
+    .dashboard-main-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    .dashboard-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #152c69;
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(21, 44, 105, 0.24);
+    }
+
+    .dashboard-welcome {
+      color: #ffffff;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .dashboard-status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.35rem;
+      border: 1px solid #86efac;
+      border-radius: 999px;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.12);
+    }
+
+    .dashboard-clock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 305px;
+      padding: 0.85rem 1.35rem;
+      border: 1px solid rgba(253, 224, 71, 0.85);
+      border-radius: 1.25rem;
+      background: #1d3b86;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .dashboard-logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 126px;
+      padding: 0.85rem 1.65rem;
+      border: 1px solid #fde047;
+      border-radius: 999px;
+      background: #ffda47;
+      color: #183575;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: 0 10px 18px rgba(250, 204, 21, 0.18);
+    }
+
+    .dashboard-logout:hover {
+      background: #ffe069;
+    }
+
+    .dashboard-sidebar-link.is-active {
+      transform: translateX(3px);
+      border-color: rgba(253, 224, 71, 0.9);
+      background: rgba(250, 204, 21, 0.18);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(20, 45, 111, 0.2);
+    }
+
+    .dashboard-sidebar-link.is-active svg {
+      color: #fde047;
+    }
+
+    .dashboard-context-label {
+      display: block;
+      color: rgba(219, 234, 254, 0.8);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-heading-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22rem;
+    }
+
+    .dashboard-layout-grid {
+      display: grid;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .dashboard-primary-column {
+      display: grid;
+      gap: 1.5rem;
+      align-content: start;
+    }
+
+    .dashboard-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .dashboard-panel-header--stacked {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .dashboard-panel-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #4f6b95;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-panel-title {
+      color: var(--dash-ink);
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .dashboard-panel-copy {
+      margin-top: 0.3rem;
+      color: var(--dash-ink-soft);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .dashboard-stat-card {
+      border: 1px solid var(--dash-line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    /* The overview cards open the section they summarise (dashboard.js). */
+    .dashboard-stat-card[data-overview-link]:focus-visible {
+      outline: 3px solid #315fda;
+      outline-offset: 2px;
+    }
+
+    /* Student number comes from the account and is not sent with the form.
+       theme.css paints every #requestSection input white with !important, so
+       the read-only look needs the same prefix to show. */
+    body.theme-light #requestSection .registration-info-field input[readonly] {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      cursor: default;
+    }
+
+    .registration-field-hint {
+      margin-top: 0.3rem;
+      color: var(--dash-ink-soft);
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+
+    .dashboard-section-card {
+      border: 1px solid var(--dash-line);
+      background: var(--dash-surface);
+      box-shadow: var(--dash-shadow);
+    }
+
+    .pickup-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .pickup-metric-card {
+      border: 1px solid var(--dash-line);
+      border-radius: 20px;
+      padding: 1rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    .pickup-metric-card[data-tone="blue"] {
+      background: linear-gradient(180deg, #fbfdff 0%, #f3f8ff 100%);
+    }
+
+    .pickup-metric-card[data-tone="emerald"] {
+      background: linear-gradient(180deg, #f8fffb 0%, #edfdf5 100%);
+    }
+
+    .pickup-metric-card[data-tone="slate"] {
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+    }
+
+    .pickup-metric-label {
+      color: var(--dash-ink-soft);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .pickup-metric-value {
+      margin-top: 0.7rem;
+      color: var(--dash-ink);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .dashboard-detail-card {
+      border: 1px solid var(--dash-line);
+      border-radius: 18px;
+      padding: 1rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    .dashboard-detail-card[data-tone="blue"] {
+      border-color: #d7e4fb;
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+    }
+
+    .dashboard-detail-card[data-tone="emerald"] {
+      border-color: #caebde;
+      background: linear-gradient(180deg, #ffffff 0%, #effaf4 100%);
+    }
+
+    .dashboard-detail-card[data-tone="slate"] {
+      border-color: var(--dash-line);
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+    }
+
+    .dashboard-detail-label {
+      color: var(--dash-ink-soft);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-detail-value {
+      margin-top: 0.6rem;
+      color: var(--dash-ink);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .pickup-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .pickup-controls-summary {
+      color: var(--dash-ink-soft);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .pickup-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--dash-line);
+      border-radius: 14px;
+      background: #ffffff;
+      color: var(--dash-ink);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pickup-button:hover {
+      border-color: #b8cbe2;
+      background: #f5f8fc;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 40, 77, 0.08);
+    }
+
+    .pickup-toggle-button {
+      padding: 0.8rem 1rem;
+    }
+
+    .pickup-history-button {
+      padding: 0.78rem 0.95rem;
+    }
+
+    .pickup-table-wrap {
+      margin-top: 1rem;
+      overflow: auto;
+      border: 1px solid var(--dash-line);
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    .pickup-table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+    }
+
+    .pickup-table thead th {
+      border-bottom: 1px solid #e3ebf5;
+      background: #eef3f9;
+      color: var(--dash-ink);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .pickup-table tbody tr {
+      background: #ffffff;
+    }
+
+    .pickup-table tbody tr:nth-child(even) {
+      background: #f9fbfe;
+    }
+
+    .pickup-table tbody tr:hover {
+      background: #f1f6fd;
+    }
+
+    .pickup-table td {
+      border-bottom: 1px solid #edf2f8;
+      background: transparent;
+      color: #334155;
+    }
+
+    .pickup-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .pickup-type-pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--dash-line);
+      border-radius: 999px;
+      padding: 0.45rem 0.85rem;
+      background: #eef3f9;
+      color: var(--dash-ink);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .pickup-item-box {
+      border: 1px solid #e6edf6;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 0.85rem 0.95rem;
+      color: #475569;
+      line-height: 1.65;
+    }
+
+    .pickup-compact-card {
+      margin-top: 0.9rem;
+      border: 1px solid var(--dash-line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      padding: 1rem;
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    .pickup-compact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+    }
+
+    .pickup-compact-items {
+      border: 1px solid #e6edf6;
+      border-radius: 14px;
+      background: #f8fbff;
+      padding: 0.85rem 0.95rem;
+      color: #475569;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .pickup-compact-meta {
+      color: #475569;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .pickup-collapse-toggle {
+      margin-bottom: 0.9rem;
+      width: 100%;
+      justify-content: space-between;
+      gap: 0.9rem;
+      padding: 0.95rem 1rem;
+      text-align: left;
+      box-shadow: var(--dash-shadow-soft);
+    }
+
+    .pickup-collapse-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #eef3f9;
+      color: var(--dash-ink);
+    }
+
+    .pickup-collapse-title {
+      color: var(--dash-ink);
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .pickup-collapse-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--dash-ink-soft);
+      font-size: 0.77rem;
+      line-height: 1.5;
+    }
+
+    .pickup-collapse-state {
+      color: var(--dash-ink-soft);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pickup-status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--dash-line);
+      border-radius: 999px;
+      padding: 0.48rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .pickup-status-pill--pending {
+      border-color: #d7e0ec;
+      background: #eef3f9;
+      color: var(--dash-ink);
+    }
+
+    .pickup-status-pill--confirmed {
+      border-color: #cfe3d8;
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    .pickup-status-pill--adjusted {
+      border-color: #fde68a;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .pickup-status-pill--completed {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .pickup-status-pill--missed,
+    .pickup-status-pill--failed {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .pickup-status-pill--neutral {
+      border-color: #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .registration-workflow {
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 1120px);
+      min-height: 0;
+      justify-self: center;
+      border: 1px solid var(--dash-line);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: var(--dash-shadow);
+      overflow: hidden;
+    }
+
+    .registration-workflow-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      padding: 0.75rem;
+    }
+
+    .registration-workflow-form {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      gap: 0.75rem;
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .registration-step-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+    }
+
+    .registration-step-panels > [data-step-panel],
+    #registrationStatusMessage,
+    #completeRegistrationForm,
+    #registrationSummaryCards,
+    #registrationSummaryText {
+      width: 100%;
+    }
+
+    #registrationSummaryCards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    #registrationSummaryCards > div {
+      min-height: 102px;
+    }
+
+    #registrationSummaryText {
+      line-height: 1.65;
+    }
+
+    .registration-workflow-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 28px;
+      padding: 20px 24px;
+      border: 1px solid #dbe6fb;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .registration-workflow-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.6rem;
+    }
+
+    @media (min-width: 1024px) {
+      .dashboard-shell {
+        display: flex;
+      }
+
+      .dashboard-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 270px;
+        overflow-y: auto;
+        box-shadow: 12px 0 32px rgba(23, 53, 127, 0.18);
+      }
+
+      .dashboard-main {
+        margin-left: 270px;
+        width: calc(100% - 270px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-welcome {
+        font-size: 1.3rem;
+      }
+
+      .dashboard-clock {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .registration-workflow-body {
+        max-height: none;
+      }
+
+      .registration-workflow-footer {
+        position: static;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .registration-workflow-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .registration-workflow-actions button,
+      .registration-workflow-footer > button {
+        width: 100%;
+      }
+
+      #registrationSummaryCards {
+        grid-template-columns: 1fr;
+      }
+
+      .pickup-metrics-grid,
+      .pickup-compact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pickup-controls {
+        align-items: stretch;
+      }
+
+      .pickup-button {
+        width: 100%;
+      }
+
+      .dashboard-panel-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+      .student-page-title {
+        color: rgba(219, 234, 254, 0.85);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+      }
+
+      .student-search {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+        border-radius: 12px;
+        background: #1d3b86;
+        color: rgba(219, 234, 254, 0.8);
+      }
+
+      .student-search:focus-within {
+        border-color: #fde047;
+        box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.18);
+      }
+
+      .student-search .search-input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 0.85rem;
+        color: #ffffff;
+        width: 120px;
+      }
+
+      .student-search .search-input::placeholder {
+        color: rgba(219, 234, 254, 0.55);
+      }
+
+      .student-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .student-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ffda47;
+        color: #183575;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .student-profile-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .student-profile-name {
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .student-profile-role {
+        color: rgba(219, 234, 254, 0.75);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .student-bell {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #ffffff;
+        background: #1d3b86;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+      }
+
+      .student-bell svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .student-bell-dot {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ffda47;
+        border: 2px solid #152c69;
+      }
+
+      @media (max-width: 640px) {
+        .student-page-title {
+          font-size: 0.85rem;
+        }
+
+        .student-profile-info {
+          display: none;
+        }
+
+        .student-search .search-input {
+          width: 90px;
+        }
+      }
+  </style>
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/app-shell.css">
+  <script src="/js/app-shell.js"></script>
+  <script src="/js/ui-kit.js"></script>
+  <script src="/js/student-nav.js"></script>
+</head>
+<body class="theme-light min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+  <div id="sidebarOverlay" class="app-sidebar-overlay" aria-hidden="true"></div>
+  <div class="dashboard-shell min-h-screen">
+    <aside id="sidebar" class="dashboard-sidebar app-sidebar w-full border-r border-white/20 text-white">
+      <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+        <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+          <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+            <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+            <path d="M19 10v5"></path>
+          </svg>
+        </span>
+        <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+      </div>
+      <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-student-nav></ul>
+    </aside>
+
+    <div class="dashboard-main app-main w-full min-w-0">
+      <header class="dashboard-topbar">
+        <div class="dashboard-header-inner flex flex-wrap items-center justify-between gap-3 px-5 py-3 md:px-7">
+          <div class="header-left flex flex-wrap items-center gap-4">
+            <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="dashboard-heading-group">
+              <h1 id="dashboardWelcomeText" class="dashboard-welcome">Welcome</h1>
+            </div>
+            <span id="headerClock" class="dashboard-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+            <span id="registrationStatusBadge" class="dashboard-status-pill">Status: -</span>
+          </div>
+          <div class="header-right flex flex-wrap items-center justify-end gap-3 sm:flex sm:items-center sm:gap-4">
+            <div class="app-notifications" data-notifications>
+              <button type="button" class="student-bell header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="student-bell-dot" data-notifications-badge hidden></span>
+              </button>
+              <div class="app-notifications-panel" data-notifications-panel hidden></div>
+            </div>
+            <div class="app-profile-menu" data-profile-menu>
+              <button type="button" class="student-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+                <span class="student-avatar" id="studentAvatar">S</span>
+                <span class="student-profile-info">
+                  <span class="student-profile-name" id="studentProfileName">Student</span>
+                  <span class="student-profile-role">Student</span>
+                </span>
+                <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+                <a class="app-menu-item" role="menuitem" href="/profile">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                  My Profile
+                </a>
+                <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-main-inner px-4 pb-8 pt-5 md:px-7">
+        <div class="module-title-bar">Dashboard</div>
+        <div id="userInfoError" class="user-info-error hidden" role="alert" style="margin-bottom: 1rem;">
+          <span id="userInfoErrorText"></span>
+          <button id="userInfoErrorRetry" class="user-info-error-retry">Retry</button>
+        </div>
+        <div id="dashboardWorkspace" class="dashboard-layout-grid">
+          <div class="dashboard-primary-column">
+            <section id="dashboardOverview" class="space-y-5">
+              <div id="dashboardHighlights" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div class="dashboard-stat-card p-5 transition hover:-translate-y-1 hover:shadow-md cursor-pointer" data-overview-link="request" role="link" tabindex="0">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  </div>
+                  <p class="text-sm font-bold uppercase tracking-wider text-slate-500">Registration</p>
+                  <p id="overviewRegistrationStatus" class="mt-1 text-xl font-bold text-slate-900">Loading...</p>
+                  <p id="overviewRegistrationHint" class="mt-2 text-xs leading-relaxed text-slate-500">...</p>
+                </div>
+
+                <div class="dashboard-stat-card p-5 transition hover:-translate-y-1 hover:shadow-md cursor-pointer" data-overview-link="request" role="link" tabindex="0">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                  </div>
+                  <p class="text-sm font-bold uppercase tracking-wider text-slate-500">Request Items</p>
+                  <p id="overviewRequestValue" class="mt-1 text-xl font-bold text-slate-900">0</p>
+                  <p id="overviewRequestHint" class="mt-2 text-xs leading-relaxed text-slate-500">...</p>
+                </div>
+
+                <div class="dashboard-stat-card p-5 transition hover:-translate-y-1 hover:shadow-md cursor-pointer" data-overview-link="pickup" role="button" tabindex="0">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  </div>
+                  <p class="text-sm font-bold uppercase tracking-wider text-slate-500">Next Pickup</p>
+                  <p id="overviewPickupValue" class="mt-1 text-xl font-bold text-slate-900">--</p>
+                  <p id="overviewPickupHint" class="mt-2 text-xs leading-relaxed text-slate-500">...</p>
+                </div>
+              </div>
+            </section>
+
+            <section id="pickupNotifications" class="dashboard-section-card rounded-[28px] p-5">
+              <div id="pickupSummaryHeader" class="dashboard-panel-header">
+                <div>
+                  <h2 class="dashboard-panel-title mt-2">Activity</h2>
+                </div>
+              </div>
+              <div id="pickupNotificationsContent" class="space-y-4"></div>
+            </section>
+          </div>
+        </div>
+
+        <section id="requestSection" class="registration-workflow">
+          <div class="registration-step-header">
+            <div id="registrationStepper" class="registration-stepper" role="group" aria-label="Registration steps" aria-live="polite"></div>
+            <span id="registrationStepLabel" class="registration-step-label">Step 1 of 5</span>
+          </div>
+
+          <div class="registration-workflow-body">
+            <p id="registrationStatusMessage" class="dashboard-inline-message"></p>
+            <form id="completeRegistrationForm" class="registration-workflow-form" autocomplete="on" novalidate>
+              <div id="registrationStepPanels" class="registration-step-panels">
+                <div data-step-panel="0">
+                  <div class="registration-step-card">
+                    <div class="registration-step-heading">
+                      <span class="registration-step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                          <path d="M7 3h7l5 5v13H7z"></path>
+                          <path d="M14 3v5h5"></path>
+                          <path d="M9 13h6"></path>
+                          <path d="M9 17h6"></path>
+                        </svg>
+                      </span>
+                      <h2 class="registration-step-title">ORF</h2>
+                    </div>
+                    <div class="registration-step-grid">
+                      <div class="registration-card registration-orf-upload-card">
+                        <h3 class="registration-card-title">ORF Upload</h3>
+                        <input type="file" id="editPicture" accept="image/*,.pdf,application/pdf" class="registration-file-input">
+                        <p id="orfFileName" class="registration-file-name">No file chosen</p>
+                        <p class="registration-file-hint">Supported formats: PDF, JPG, PNG. Maximum 5MB.</p>
+                        <div id="orfUploadMessage" class="registration-orf-message" style="display:none;"></div>
+                      </div>
+                      <div class="registration-card registration-orf-preview-card">
+                        <h3 class="registration-card-title">ORF Preview</h3>
+                        <div id="orfPreviewWrap" class="registration-orf-preview"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-step-panel="1" style="display:none;">
+                  <div class="registration-step-card">
+                    <div class="registration-step-heading">
+                      <span class="registration-step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      </span>
+                      <h2 class="registration-step-title">Student Information</h2>
+                    </div>
+                    <div class="registration-card">
+                      <div class="registration-info-grid">
+                        <div class="registration-info-field">
+                          <label for="editName">Name <span class="registration-required" aria-hidden="true">*</span></label>
+                          <input type="text" id="editName" autocomplete="name" required>
+                        </div>
+                        <div class="registration-info-field">
+                          <label for="editStudentNumber">Student Number</label>
+                          <input type="text" id="editStudentNumber" autocomplete="off" readonly aria-describedby="editStudentNumberHint">
+                          <p id="editStudentNumberHint" class="registration-field-hint">From your account. It is not changed by this form.</p>
+                        </div>
+                        <div class="registration-info-field">
+                          <label for="editAge">Age <span class="registration-required" aria-hidden="true">*</span></label>
+                          <input type="number" id="editAge" autocomplete="off" required>
+                        </div>
+                        <div class="registration-info-field">
+                          <label for="editCourse">Course <span class="registration-required" aria-hidden="true">*</span></label>
+                          <select id="editCourse" class="registration-select" required></select>
+                        </div>
+                        <div class="registration-info-field">
+                          <label for="editYearLevel">Year Level</label>
+                          <select id="editYearLevel" class="registration-select"></select>
+                        </div>
+                        <div class="registration-info-field">
+                          <label for="studentType">Student Type</label>
+                          <select id="studentType" class="registration-select">
+                            <option value="regular">Regular</option>
+                            <option value="irregular">Irregular</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-step-panel="2" style="display:none;">
+                  <div class="registration-step-card">
+                    <div class="registration-step-heading">
+                      <span class="registration-step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                          <path d="M4 6l8-3 8 3"></path>
+                          <path d="M4 6v12l8 3 8-3V6"></path>
+                          <path d="M4 12l8 3 8-3"></path>
+                        </svg>
+                      </span>
+                      <h2 class="registration-step-title">Modules</h2>
+                    </div>
+                    <div class="registration-step-grid">
+                      <div class="registration-card registration-window-card">
+                        <h3 class="registration-card-title">Module Window</h3>
+                        <ul id="moduleCatalogList" class="registration-catalog-list"></ul>
+                        <button type="button" id="addModuleRowBtn" class="registration-add-btn">Add Module</button>
+                      </div>
+                      <div class="registration-card registration-selected-card">
+                        <h3 class="registration-card-title">Selected Modules</h3>
+                        <div id="moduleRows" class="registration-rows" aria-live="polite"></div>
+                        <p id="moduleEmptyState" class="registration-empty-state">No modules added yet.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-step-panel="3" style="display:none;">
+                  <div class="registration-step-card">
+                    <div class="registration-step-heading">
+                      <span class="registration-step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+                        </svg>
+                      </span>
+                      <h2 class="registration-step-title">Books</h2>
+                    </div>
+                    <div class="registration-step-grid">
+                      <div class="registration-card registration-window-card">
+                        <h3 class="registration-card-title">Book Window</h3>
+                        <ul id="bookCatalogList" class="registration-catalog-list"></ul>
+                        <button type="button" id="addBookRowBtn" class="registration-add-btn">Add Book</button>
+                      </div>
+                      <div class="registration-card registration-selected-card">
+                        <h3 class="registration-card-title">Selected Books</h3>
+                        <div id="bookRows" class="registration-rows" aria-live="polite"></div>
+                        <p id="bookEmptyState" class="registration-empty-state">No books added yet.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-step-panel="4" style="display:none;">
+                  <div class="registration-step-card">
+                    <div class="registration-step-heading">
+                      <span class="registration-step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                          <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
+                        </svg>
+                      </span>
+                      <h2 class="registration-step-title">Uniforms &amp; Summary</h2>
+                    </div>
+                    <div class="registration-step-grid">
+                      <div class="registration-card registration-uniform-card">
+                        <h3 class="registration-card-title">Uniform Window</h3>
+                        <div class="registration-uniform-fields">
+                          <div class="registration-info-field">
+                            <label for="editUniformType">Uniform Type</label>
+                            <select id="editUniformType" class="registration-select"></select>
+                          </div>
+                          <div class="registration-info-field">
+                            <label for="uniformSize">Uniform Size</label>
+                            <select id="uniformSize" class="registration-select"></select>
+                          </div>
+                          <div class="registration-info-field">
+                            <label for="uniformNotes">Uniform Notes</label>
+                            <textarea id="uniformNotes" rows="3" placeholder="Add notes (optional)"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="registration-card registration-summary-card">
+                        <h3 class="registration-card-title">Summary</h3>
+                        <div id="registrationSummaryCards" class="registration-summary-metrics"></div>
+                        <div class="registration-summary-detail">
+                          <h4 class="registration-summary-subtitle">Submission Preview</h4>
+                          <div id="registrationSummaryText"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="registration-workflow-footer">
+                <button type="button" id="registrationBackBtn" class="registration-nav-btn registration-nav-btn--back">Back</button>
+                <div class="registration-workflow-actions">
+                  <button type="button" id="registrationNextBtn" class="registration-nav-btn registration-nav-btn--primary">Next</button>
+                  <button type="submit" id="registrationSubmitBtn" class="registration-nav-btn registration-nav-btn--primary" style="display:none;">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/student-header.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

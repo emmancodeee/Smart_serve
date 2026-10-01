@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Supply & Stock - Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dash-line: #d7e0ec;
+            --dash-line-strong: #c7d5e8;
+            --dash-surface: #ffffff;
+            --dash-surface-soft: #f7faff;
+            --dash-surface-muted: #eef3f9;
+            --dash-ink: #10284d;
+            --dash-ink-soft: #5a6f8d;
+            --dash-shadow: 0 16px 42px rgba(16, 40, 77, 0.12);
+            --dash-shadow-soft: 0 10px 24px rgba(16, 40, 77, 0.06);
+        }
+
+        .dashboard-panel {
+            border: 1px solid var(--dash-line);
+            border-radius: 24px;
+            background: var(--dash-surface);
+            box-shadow: var(--dash-shadow-soft);
+        }
+
+        .dashboard-panel-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-panel-eyebrow {
+            margin: 0 0 0.1rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--dash-ink-soft);
+        }
+
+        .dashboard-panel-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dash-ink);
+            line-height: 1.2;
+        }
+
+        .dashboard-panel-copy {
+            margin: 0.2rem 0 0;
+            color: var(--dash-ink-soft);
+            font-size: 0.9rem;
+        }
+
+        .admin-data-table .student-name { color: var(--dash-ink); font-weight: 700; }
+        .admin-data-table .student-email { display: block; margin-top: 0.18rem; overflow: hidden; color: var(--dash-ink-soft); font-size: 0.78rem; text-overflow: ellipsis; }
+        .admin-data-table .subject-cell { max-width: 260px; color: var(--dash-ink); font-weight: 600; }
+        .admin-data-table .date-cell { color: var(--dash-ink-soft); font-size: 0.84rem; white-space: nowrap; }
+        .table-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 220px; }
+        .table-actions .btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; line-height: 1.2; }
+        .empty-table-state { padding: 2.5rem !important; color: var(--dash-ink-soft) !important; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .dashboard-panel-header { flex-direction: column; }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/admin.css?v=NAV1B4D2">
+    <link rel="stylesheet" href="/css/inventory.css">
+    <style>
+        /* ===== Supply & Stock Tabs ===== */
+        .ss-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ss-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.4rem;
+            border: 1px solid var(--dash-line);
+            border-radius: 999px;
+            background: #ffffff;
+            color: var(--dash-ink-soft);
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ss-tab-btn:hover {
+            border-color: #2747A6;
+            color: #2747A6;
+        }
+
+        .ss-tab-btn.active {
+            background: #2747A6;
+            color: #ffffff;
+            border-color: #2747A6;
+        }
+
+        .ss-tab-panel {
+            display: none;
+        }
+
+        .ss-tab-panel.active {
+            display: block;
+        }
+
+        /* ===== Forms ===== */
+        .ss-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .ss-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .ss-form .form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--dash-ink);
+        }
+
+        .ss-form .form-group input,
+        .ss-form .form-group select,
+        .ss-form .form-group textarea {
+            height: 48px;
+            padding: 0 0.9rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #0F172A;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .ss-form .form-group textarea {
+            height: auto;
+            padding: 0.7rem 0.9rem;
+            resize: vertical;
+        }
+
+        .ss-form .form-group input:focus,
+        .ss-form .form-group select:focus,
+        .ss-form .form-group textarea:focus {
+            border-color: #2747A6;
+            box-shadow: 0 0 0 3px rgba(39,71,166,0.1);
+        }
+
+        .ss-form .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .ss-form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .ss-submit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            height: 46px;
+            padding: 0 1.6rem;
+            border: none;
+            border-radius: 12px;
+            background: #F4C542;
+            color: #183575;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .ss-submit-btn:hover {
+            background: #F59E0B;
+            transform: translateY(-1px);
+        }
+
+        .ss-reset-btn {
+            display: inline-flex;
+            align-items: center;
+            height: 46px;
+            padding: 0 1.4rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #64748B;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .ss-reset-btn:hover {
+            background: #F8FAFC;
+        }
+
+        /* ===== Direction badges ===== */
+        .dir-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .dir-badge.supply {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .dir-badge.stockout {
+            background: #FEE2E2;
+            color: #B91C1C;
+        }
+
+        .reason-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: #F1F5F9;
+            color: #475569;
+            white-space: nowrap;
+        }
+    </style>
+    <link rel="stylesheet" href="/css/app-shell.css">
+    <script src="/js/app-shell.js"></script>
+    <script src="/js/ui-kit.js"></script>
+</head>
+<body class="admin-page min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">Skip to main content</a>
+
+    <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_24%),linear-gradient(180deg,#f7fbff_0%,#eef4fb_100%)] lg:flex">
+
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/50 z-40 hidden" aria-hidden="true"></div>
+
+    <nav id="sidebar" class="sidebar-shell app-sidebar w-full border-r border-white/20 bg-gradient-to-b from-[#17357f] via-[#2447a8] to-[#315fda] text-white shadow-[12px_0_32px_rgba(23,53,127,0.18)] lg:fixed lg:inset-y-0 lg:w-[270px] lg:overflow-y-auto lg:translate-x-0 fixed inset-y-0 left-0 w-[270px] transform -translate-x-full transition-transform duration-300 ease-in-out z-40" style="background:linear-gradient(180deg,#17357f 0%,#2447a8 54%,#315fda 100%);" aria-label="Main navigation">
+        <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+                <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+                    <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+                    <path d="M19 10v5"></path>
+                </svg>
+            </span>
+            <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+        </div>
+    <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-admin-nav></ul>
+    </nav>
+
+    <div id="main-content" class="main-content-shell app-main w-full min-w-0 lg:ml-[270px]">
+        <header class="admin-header app-header sticky top-0 z-20 bg-[#152c69] text-white shadow-lg" role="banner">
+            <div class="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
+                <div class="header-left flex items-center gap-4">
+                    <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <span id="headerGreeting" class="header-greeting"></span>
+                    <span id="headerClock" class="admin-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+                </div>
+                <div class="header-right">
+                    <div class="app-notifications" data-notifications>
+                        <button type="button" class="header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                            <span class="bell-badge" data-notifications-badge hidden></span>
+                        </button>
+                        <div class="app-notifications-panel" data-notifications-panel hidden></div>
+                    </div>
+                    <div class="app-profile-menu" data-profile-menu>
+                        <button type="button" class="admin-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+                            <span class="profile-avatar" id="profileAvatar">A</span>
+                            <span class="profile-info">
+                                <span class="profile-name" id="profileName">Admin</span>
+                                <span class="profile-role" id="profileRole">Administrator</span>
+                            </span>
+                            <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+                            <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main mx-auto grid max-w-[1280px] gap-5 px-4 pb-8 pt-5 md:px-6" role="main">
+            <div class="admin-section dashboard-panel p-6">
+                <div class="dashboard-panel-header">
+                    <div>
+                        <h2 class="dashboard-panel-title">Manage Inventory Movement</h2>
+                        <p class="dashboard-panel-copy">Add incoming supply or record removed stock. Inventory levels update automatically.</p>
+                    </div>
+                </div>
+
+                <div class="ss-tabs" role="tablist" aria-label="Supply and Stock tabs">
+                    <button class="ss-tab-btn active" data-tab="supply" role="tab" aria-selected="true">Supply In</button>
+                    <button class="ss-tab-btn" data-tab="stockout" role="tab" aria-selected="false">Stock Out</button>
+                    <button class="ss-tab-btn" data-tab="history" role="tab" aria-selected="false">History</button>
+                </div>
+
+                <!-- Supply In Tab -->
+                <div class="ss-tab-panel active" id="tab-supply" role="tabpanel">
+                    <form id="supplyForm" class="ss-form">
+                        <div class="form-group">
+                            <label for="supplyItemName">Item Name *</label>
+                            <input type="text" id="supplyItemName" required placeholder="e.g. Ballpen, Notebook" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplyCategory">Category *</label>
+                            <select id="supplyCategory" required>
+                                <option value="" disabled selected>Select category...</option>
+                                <option value="Books">Books</option>
+                                <option value="Modules">Modules</option>
+                                <option value="Uniforms">Uniforms</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Stationery">Stationery</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplyQuantity">Quantity *</label>
+                            <input type="number" id="supplyQuantity" required min="1" step="1" placeholder="e.g. 50" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplyNotes">Notes</label>
+                            <input type="text" id="supplyNotes" placeholder="Optional reference or supplier info" autocomplete="off">
+                        </div>
+                        <div class="ss-form-actions">
+                            <button type="button" class="ss-reset-btn" data-reset-form="supplyForm">Clear</button>
+                            <button type="submit" class="ss-submit-btn">Add Supply</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Stock Out Tab -->
+                <div class="ss-tab-panel" id="tab-stockout" role="tabpanel">
+                    <form id="stockOutForm" class="ss-form">
+                        <div class="form-group">
+                            <label for="stockOutItem">Inventory Item *</label>
+                            <select id="stockOutItem" required>
+                                <option value="" disabled selected>Loading inventory...</option>
+                            </select>
+                            <small id="stockOutAvailability" class="text-xs font-medium text-slate-500">Select an item to view its current stock.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="stockOutReason">Reason *</label>
+                            <select id="stockOutReason" required>
+                                <option value="" disabled selected>Select reason...</option>
+                                <option value="Damaged">Damaged</option>
+                                <option value="Expired">Expired</option>
+                                <option value="Disposed">Disposed</option>
+                                <option value="Manual Adjustment">Manual Adjustment</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="stockOutQuantity">Quantity *</label>
+                            <input type="number" id="stockOutQuantity" required min="1" step="1" placeholder="e.g. 5" autocomplete="off">
+                            <small class="text-xs font-medium text-slate-500">Maximum is the item's current stock.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="stockOutNotes">Notes</label>
+                            <input type="text" id="stockOutNotes" placeholder="Optional notes" autocomplete="off">
+                        </div>
+                        <div class="ss-form-actions">
+                            <button type="button" class="ss-reset-btn" data-reset-form="stockOutForm">Clear</button>
+                            <button type="submit" class="ss-submit-btn">Remove Stock</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- History Tab -->
+                <div class="ss-tab-panel" id="tab-history" role="tabpanel">
+                    <div id="historyFilterContainer" class="mb-3"></div>
+                    <div class="table-responsive">
+                        <table class="table admin-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Reason</th>
+                                    <th>Handled By</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center table-loading-state">Loading history...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/admin-nav.js?v=NAV1B4D2"></script>
+    <script src="/js/admin-filters.js"></script>
+    <script src="/js/admin.js?v=NAV1B4D2"></script>
+    <script src="/js/supply-stock.js"></script>
+</body>
+</html>

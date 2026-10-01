@@ -1,0 +1,10 @@
+## 1. Reuse the standard module title bar on the verification gate
+
+- [x] 1.1 In `public/admin.html` `#adminAccountsAccessGate` (~line 259-295), replace the inline-styled `<h2>` ("Verify to Access Admin Accounts") and its `.admin-surface-block` wrapper so the title becomes a standard `.section-header-row` with a bare `<h2>` (identical markup to `#adminAccounts` at ~298-300): `<div class="section-header-row"><h2>Verify to Access Admin Accounts</h2></div>` directly inside the section, with no inline title styles (no `color`, `font-size`, `font-weight` on the `h2`).
+- [x] 1.2 Move the description `<p>` and the `<form id="adminAccountsAccessGateForm">` (fields, eye toggle, Verify Access button, message) into an `.admin-surface-block` below the title bar, preserving all existing classes, ids, and attributes exactly (no changes to any `adminGate*` ids, form fields, button, or `adminGateMessage` element).
+
+## 2. Verification
+
+- [x] 2.1 Grep `public/admin.html` to confirm the gate section uses `<div class="section-header-row"><h2>Verify to Access Admin Accounts</h2></div>` and that no inline title styling (`color: #0b1f4d`, `font-size: 1.25rem`) remains on the gate heading.
+- [x] 2.2 Grep `public/js/admin.js` to confirm the gate handlers still resolve their ids (`adminAccountsAccessGate`, `adminAccountsAccessGateForm`, `adminGateEmail`, `adminGatePassword`, `adminGatePasswordToggle`, `adminGateEyeIcon`, `adminGateEyeOffIcon`, `adminGateVerifyBtn`, `adminGateMessage`) — unchanged structure means no JS edits required.
+- [ ] 2.3 Run `node --check` on `public/js/admin.js` (unchanged, smoke) and reload `public/admin.html` in the browser to visually confirm the verification title bar matches "Admin Account Management" (navy `#152c69`, white text, left-aligned, rounded-top/square-bottom corners, consistent gap above the description) and the verification flow still works.

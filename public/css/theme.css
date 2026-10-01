@@ -1,0 +1,1635 @@
+:root {
+  --user-bg: #ffffff;
+  --user-bg-soft: #f7f9fc;
+  --user-bg-muted: #eef3f9;
+  --user-surface: #ffffff;
+  --user-surface-soft: #f8fbff;
+  --user-border: #d9e3ef;
+  --user-border-strong: #c6d4e3;
+  --user-text: #10284d;
+  --user-text-soft: #5b6f8e;
+  --user-text-muted: #7c8da7;
+  --user-navy: #10284d;
+  --user-navy-strong: #0b1f4d;
+  --user-navy-soft: #173b6d;
+  --user-shadow: 0 16px 42px rgba(16, 40, 77, 0.08);
+  --user-shadow-soft: 0 10px 24px rgba(16, 40, 77, 0.05);
+
+  /* Module title bar - same values as the admin section titles (admin.css) */
+  --module-title-bg: #152c69;
+  --module-title-fg: #ffffff;
+  --module-title-font-size: 1rem;
+  --module-title-font-weight: 700;
+  --module-title-letter-spacing: 0.01em;
+  --module-title-pad-y: 16px;
+  --module-title-pad-x: 24px;
+  --module-title-radius: 18px 18px 0 0;
+}
+
+.module-title-bar {
+  display: flex;
+  align-items: center;
+  padding: var(--module-title-pad-y) var(--module-title-pad-x);
+  color: var(--module-title-fg);
+  background: var(--module-title-bg);
+  font-size: var(--module-title-font-size);
+  font-weight: var(--module-title-font-weight);
+  letter-spacing: var(--module-title-letter-spacing);
+  border-radius: var(--module-title-radius);
+}
+
+/* Student side: unified vertical rhythm for module pages. The page
+   containers declare pt-5 but the compiled tailwind.css has NO .pt-5
+   utility (verified), so the title box supplies the 20px gap between
+   the sticky header and the blue title box directly (matches Admin
+   mt-5). This rule pins the whole gap to a uniform 20px above and
+   20px below (matching Admin mt-5/mb-5), overriding any mb-* utility
+   so no module can double-space. Applies only inside Student main
+   containers that contain a title bar (Dashboard, User Profile,
+   Request, Announcements, Feedback, Returns); Admin and the Schedule
+   page have no .module-title-bar and are untouched. */
+body.theme-light :is(.dashboard-main-inner, .student-main-inner) > .module-title-bar {
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+}
+
+body.theme-light {
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 22%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%) !important;
+  color: var(--user-text) !important;
+}
+
+body.theme-light :is(.dashboard-shell, .student-shell) {
+  background: transparent !important;
+}
+
+body.theme-light :is(.dashboard-sidebar, .student-sidebar) {
+  background: linear-gradient(180deg, var(--user-navy) 0%, var(--user-navy-soft) 100%) !important;
+  box-shadow: 14px 0 32px rgba(16, 40, 77, 0.12) !important;
+}
+
+body.theme-light :is(.dashboard-sidebar > div, .student-sidebar > div) {
+  border-color: rgba(253, 224, 71, 0.5) !important;
+}
+
+body.theme-light :is(.dashboard-sidebar span:first-child, .student-sidebar span:first-child) {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-light :is(.dashboard-sidebar, .student-sidebar),
+body.theme-light :is(.dashboard-sidebar, .student-sidebar) :is(h2, a) {
+  color: #ffffff !important;
+}
+
+body.theme-light .dashboard-sidebar-link {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Hover and active match the admin sidebar (admin.css modern-admin-refresh):
+   a soft white wash, no sideways nudge; the active item is marked by its
+   gold icon tile and edge bar (below) so it reads even as an icon rail. */
+body.theme-light .dashboard-sidebar-link:hover,
+body.theme-light .student-sidebar-link:hover {
+  transform: none !important;
+  border-color: transparent !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light .dashboard-sidebar-link.is-active {
+  transform: none !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(8, 28, 84, 0.18) !important;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) {
+  background: rgba(16, 40, 77, 0.98) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 24px rgba(16, 40, 77, 0.12) !important;
+}
+
+body.theme-light :is(.dashboard-welcome, .student-welcome, .dashboard-context-label) {
+  color: #ffffff !important;
+}
+
+body.theme-light :is(.dashboard-welcome, .student-welcome) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+body.theme-light .dashboard-context-label {
+  display: none !important;
+}
+
+body.theme-light :is(.dashboard-status-pill, .student-status-pill, .dashboard-clock, .student-clock) {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(.dashboard-status-pill, .student-status-pill) {
+  display: none !important;
+}
+
+body.theme-light :is(.dashboard-status-pill--approved, .student-status-pill--approved) {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  color: var(--user-navy) !important;
+}
+
+body.theme-light :is(.dashboard-status-pill--pending, .student-status-pill--pending, .dashboard-status-pill--rejected, .student-status-pill--rejected, .dashboard-status-pill--default, .student-status-pill--default) {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+body.theme-light :is(.dashboard-logout, .student-logout) {
+  border-color: #ffffff !important;
+  background: #ffffff !important;
+  color: var(--user-navy) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(.dashboard-logout:hover, .student-logout:hover) {
+  background: #f5f8fc !important;
+}
+
+body.theme-light :is(
+  .dashboard-stat-card,
+  .dashboard-section-card,
+  .dashboard-profile-identity,
+  .dashboard-profile-info-card,
+  .dashboard-profile-media,
+  .pickup-metric-card,
+  .dashboard-detail-card,
+  .pickup-table-wrap,
+  .pickup-compact-card,
+  .pickup-compact-items,
+  .pickup-item-box,
+  .registration-workflow,
+  .registration-workflow-footer,
+  .dashboard-request-row,
+  .student-panel,
+  .student-info-pill,
+  .schedule-empty-state,
+  #eventModal > div,
+  #detailsModal > div,
+  .week-day,
+  .schedule-item
+) {
+  border-color: var(--user-border) !important;
+  background: var(--user-surface) !important;
+  box-shadow: var(--user-shadow-soft) !important;
+  color: var(--user-text) !important;
+}
+
+body.theme-light .dashboard-hero-card {
+  background: linear-gradient(135deg, var(--user-navy) 0%, var(--user-navy-soft) 100%) !important;
+  border-color: transparent !important;
+  box-shadow: var(--user-shadow) !important;
+}
+
+body.theme-light #dashboardOverview .dashboard-hero-card {
+  display: none !important;
+}
+
+body.theme-light .dashboard-hero-card :is(h2, p, span) {
+  color: #ffffff !important;
+}
+
+body.theme-light .dashboard-hero-card::after {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 68%) !important;
+}
+
+body.theme-light :is(
+  .dashboard-panel-title,
+  .dashboard-profile-name,
+  .dashboard-profile-value,
+  .dashboard-detail-value,
+  .pickup-metric-value,
+  .pickup-collapse-title,
+  .schedule-stat-value,
+  .schedule-stat-label,
+  #currentMonth,
+  .student-panel h2,
+  .student-info-pill strong
+) {
+  color: var(--user-text) !important;
+}
+
+body.theme-light :is(
+  .dashboard-panel-copy,
+  .dashboard-panel-eyebrow,
+  .dashboard-profile-email,
+  .dashboard-profile-label,
+  .dashboard-detail-label,
+  .pickup-metric-label,
+  .pickup-controls-summary,
+  .pickup-collapse-subtitle,
+  .pickup-collapse-state,
+  .pickup-compact-meta,
+  .dashboard-empty-note,
+  .student-info-pill span
+) {
+  color: var(--user-text-soft) !important;
+}
+
+body.theme-light :is(.dashboard-status-chip, .pickup-type-pill, .pickup-status-pill, .dashboard-profile-link, .dashboard-request-row-remove, .pickup-button) {
+  border-color: var(--user-border) !important;
+  background: var(--user-surface-soft) !important;
+  color: var(--user-text) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(.dashboard-status-chip--approved, .dashboard-inline-message--approved) {
+  background: #f2f6fb !important;
+  border-color: var(--user-border-strong) !important;
+  color: var(--user-text) !important;
+}
+
+body.theme-light :is(.dashboard-status-chip--pending, .dashboard-status-chip--rejected, .dashboard-status-chip--default, .dashboard-inline-message--pending, .dashboard-inline-message--rejected, .dashboard-inline-message--default) {
+  background: var(--user-surface-soft) !important;
+  border-color: var(--user-border) !important;
+  color: var(--user-text) !important;
+}
+
+body.theme-light .dashboard-profile-link:hover,
+body.theme-light .dashboard-request-row-remove:hover,
+body.theme-light .pickup-button:hover {
+  background: #f2f6fb !important;
+  border-color: var(--user-border-strong) !important;
+}
+
+body.theme-light :is(#registrationNextBtn, #registrationSubmitBtn, .view-btn.active) {
+  border-color: var(--user-navy) !important;
+  background: var(--user-navy) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(#registrationBackBtn, .view-btn:not(.active), #eventModalCancelBtn, #detailsModalFooterCloseBtn) {
+  border-color: var(--user-border) !important;
+  background: #ffffff !important;
+  color: var(--user-text) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(#registrationNextBtn:hover, #registrationSubmitBtn:hover, .view-btn.active:hover) {
+  background: var(--user-navy-strong) !important;
+}
+
+body.theme-light :is(
+  #requestSection input,
+  #requestSection select,
+  #requestSection textarea,
+  .dashboard-request-row-select,
+  .schedule-date-input,
+  #eventModal input,
+  #eventModal select,
+  #eventModal textarea
+) {
+  border-color: var(--user-border) !important;
+  background: #ffffff !important;
+  color: var(--user-text) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(
+  #requestSection input:focus,
+  #requestSection select:focus,
+  #requestSection textarea:focus,
+  .dashboard-request-row-select:focus,
+  .schedule-date-input:focus,
+  #eventModal input:focus,
+  #eventModal select:focus,
+  #eventModal textarea:focus
+) {
+  border-color: var(--user-navy-soft) !important;
+  box-shadow: 0 0 0 4px rgba(16, 40, 77, 0.08) !important;
+}
+
+body.theme-light #requestSection input[type="file"]::file-selector-button {
+  border: 0;
+  border-radius: 999px;
+  background: var(--user-navy);
+  color: #ffffff;
+  padding: 0.45rem 0.9rem;
+  margin-right: 0.85rem;
+}
+
+body.theme-light .registration-workflow-footer {
+  border-color: var(--user-border) !important;
+  background: #ffffff !important;
+}
+
+body.theme-light .registration-step-label {
+  border-color: var(--user-border) !important;
+  background: var(--user-bg-soft) !important;
+  color: var(--user-navy) !important;
+}
+
+body.theme-light .pickup-table-wrap {
+  margin-top: 1.25rem !important;
+  padding: 0.35rem !important;
+  border-radius: 24px !important;
+}
+
+body.theme-light .pickup-table {
+  width: 100% !important;
+  min-width: 960px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: #ffffff !important;
+}
+
+body.theme-light .pickup-table thead th {
+  padding: 1rem 1.1rem !important;
+  border-bottom: 1px solid var(--user-border) !important;
+  background: var(--user-bg-muted) !important;
+  color: var(--user-navy) !important;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.08em !important;
+  white-space: nowrap;
+}
+
+body.theme-light .pickup-table td {
+  padding: 1rem 1.1rem !important;
+  border-bottom: 1px solid var(--user-border) !important;
+  background: transparent !important;
+  color: var(--user-text) !important;
+  line-height: 1.65 !important;
+  vertical-align: top !important;
+}
+
+body.theme-light .pickup-table tbody tr:nth-child(even) {
+  background: #fbfcff !important;
+}
+
+body.theme-light .pickup-table tbody tr:hover {
+  background: #f5f8fc !important;
+}
+
+body.theme-light :is(.pickup-item-box, .pickup-compact-items) {
+  padding: 1rem 1.05rem !important;
+  border-color: var(--user-border) !important;
+  background: var(--user-surface-soft) !important;
+}
+
+body.theme-light .pickup-controls {
+  margin-top: 1.25rem !important;
+  gap: 0.9rem !important;
+}
+
+body.theme-light .schedule-stat-card {
+  min-height: 136px !important;
+}
+
+body.theme-light .schedule-main-surface {
+  min-height: 560px !important;
+}
+
+body.theme-light :is(.schedule-date-input, .schedule-view-chip, .view-btn) {
+  border-color: var(--user-border) !important;
+  background: #ffffff !important;
+  color: var(--user-text) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light :is(.schedule-date-input, .schedule-view-chip) {
+  border-radius: 16px !important;
+}
+
+body.theme-light .calendar-day {
+  border-color: var(--user-border) !important;
+  background: var(--user-surface-soft) !important;
+  color: var(--user-text) !important;
+}
+
+body.theme-light .calendar-day:hover {
+  border-color: var(--user-border-strong) !important;
+  background: #ffffff !important;
+}
+
+body.theme-light .calendar-day.empty {
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+body.theme-light .week-day-header,
+body.theme-light .month-day-header,
+body.theme-light .month-day-number {
+  color: var(--user-text) !important;
+}
+
+body.theme-light .week-day {
+  background: var(--user-surface-soft) !important;
+}
+
+body.theme-light .month-cell {
+  border-color: var(--user-border) !important;
+  background: var(--user-surface-soft) !important;
+  box-shadow: none !important;
+}
+
+body.theme-light .month-cell.empty {
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+body.theme-light #eventModal > div,
+body.theme-light #detailsModal > div {
+  border-color: var(--user-border) !important;
+  background: #ffffff !important;
+}
+
+body.theme-light #eventModal :is(h2, label),
+body.theme-light #detailsModal :is(h2, .detail-label) {
+  color: var(--user-text) !important;
+}
+
+body.theme-light #eventModal .border-slate-200,
+body.theme-light #detailsModal .border-slate-200,
+body.theme-light #detailsContent .border-slate-200 {
+  border-color: var(--user-border) !important;
+}
+
+body.theme-light #eventModal .bg-slate-50,
+body.theme-light #detailsModal .bg-slate-50,
+body.theme-light #eventModal .bg-white,
+body.theme-light #detailsModal .bg-white {
+  background: #ffffff !important;
+}
+
+body.theme-light #eventModal .text-slate-700,
+body.theme-light #eventModal .text-slate-900,
+body.theme-light #detailsModal .text-slate-700,
+body.theme-light #detailsModal .text-slate-900 {
+  color: var(--user-text) !important;
+}
+
+@media (max-width: 768px) {
+  body.theme-light :is(.dashboard-topbar, .student-topbar) {
+    background: rgba(16, 40, 77, 1) !important;
+  }
+
+  body.theme-light .pickup-table {
+    min-width: 860px !important;
+  }
+}
+
+/* Keep the notification bell visible in the compact phone header. */
+@media (max-width: 640px) {
+  body :is(.dashboard-topbar, .student-topbar) .student-bell {
+    display: inline-flex;
+  }
+}
+
+/* ============================================================
+   standardize-student-ui
+   Shared overrides so every student page matches the Admin/
+   Super Admin visual system (navy gradient sidebar, one
+   light-pill active state, standard cards/inputs/buttons,
+   reserved space for async content).
+   ============================================================ */
+
+/* Sidebar keeps the admin navy gradient instead of the
+   theme-light flattening to a different navy family. */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar) {
+  background: linear-gradient(180deg, #17357f 0%, #2447a8 54%, #315fda 100%) !important;
+}
+
+/* Active item (matches the Admin/Superadmin sidebar). */
+body.theme-light .dashboard-sidebar-link.is-active,
+body.theme-light .student-sidebar-link.is-active {
+  position: relative;
+  transform: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(8, 28, 84, 0.18) !important;
+}
+
+body.theme-light .dashboard-sidebar-link.is-active::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: #F4C542;
+}
+
+body.theme-light .dashboard-sidebar-link {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+body.theme-light .dashboard-sidebar-link:hover,
+body.theme-light .dashboard-sidebar-link.is-active {
+  color: #ffffff !important;
+}
+
+/* Icon tile (matches .admin-nav-icon); gold when the item is active. */
+body.theme-light .student-nav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  border: 0 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fde047 !important;
+  flex-shrink: 0 !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body.theme-light .student-nav-icon svg {
+  width: 18px !important;
+  height: 18px !important;
+  color: inherit !important;
+}
+
+body.theme-light .dashboard-sidebar-link.is-active .student-nav-icon {
+  background: #F4C542 !important;
+  color: #152c69 !important;
+}
+
+/* ============================================================
+   align-student-sidebar-spacing
+   Pin Student sidebar geometry to the Super Admin/Admin
+   reference values (mirrors public/css/admin.css sidebar rules).
+   Layout/spacing only — no color, content, or design changes.
+   Scoped to the shared blue-nav shells; excludes the schedule
+   drawer sidebar (.drawer-sidebar) so schedule.html is untouched.
+   ============================================================ */
+
+/* Shell has no internal padding (matches .sidebar-shell). */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) {
+  padding: 0 !important;
+}
+
+/* Nav list and item geometry match the admin sidebar. Padding and gap are
+   left without !important (the selector already outranks the Tailwind
+   utilities) so app-shell.css can tighten them for the collapsed rail. */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > ul.grid {
+  padding: 16px 14px 24px;
+  gap: 4px !important;
+}
+
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) :is(.dashboard-sidebar-link, .student-sidebar-link) {
+  padding: 9px 12px;
+  gap: 12px;
+  border-radius: 12px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  font-size: 0.92rem !important;
+}
+
+/* Label line-height matches .admin-nav-link span:last-child. */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) :is(.dashboard-sidebar-link, .student-sidebar-link) > span:last-child {
+  line-height: 1.25 !important;
+}
+
+/* ============================================================
+   align-student-sidebar-header
+   Pin the Smart Serve logo/header block of the Student sidebar
+   to the exact Super Admin/Admin header geometry (header =
+   first child div of the sidebar shell). Layout/sizing/spacing/
+   alignment only — no color, menu, active-state, or content
+   changes. Scoped to the shared blue-nav shells; excludes the
+   schedule drawer sidebar so schedule.html stays untouched.
+   ============================================================ */
+
+/* Header container: horizontal/vertical padding, icon-text gap,
+   logo+text vertical centering, and the gold divider line at the
+   header's bottom edge (matches admin px-6 py-6 gap-4 border-b
+   border-yellow-300/50). */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+  padding: 22px 22px 20px;
+  border-bottom: 1px solid rgba(253, 224, 71, 0.3) !important;
+}
+
+/* Logo icon box (matches the admin sidebar's 44px logo tile). */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child span:first-child {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Logo glyph: 24px at 1.8 stroke (matches admin svg width="24").
+   No color change — glyph keeps currentColor / text-yellow-300. */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child svg {
+  width: 24px !important;
+  height: 24px !important;
+  flex-shrink: 0 !important;
+}
+
+/* "Smart Serve" wordmark: weight 700, 0.025em tracking, line-height
+   1.16, white, no default margin, and fitted to the header column
+   beside the logo so it always stays on ONE horizontal line:
+   1.4rem (browser-measured, fits the 150px text column with
+   ~17px headroom) plus nowrap as a hard no-wrap guarantee. */
+body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child h2 {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.16 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+/* Mobile header parity: mirror the Admin shrink (responsive.css
+   sidebar-shell rules at max-width 1023px) for the student shells,
+   so the header stays pixel-identical to Admin at every width. */
+@media (max-width: 1023px) {
+  body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+
+  body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child h2 {
+    font-size: 1.3rem !important;
+  }
+
+  body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child span:first-child {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  body.theme-light :is(.dashboard-sidebar, .student-sidebar:not(.drawer-sidebar)) > div:first-child svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+}
+
+/* Standard card guard rails: white cards on the light content
+   background with the admin border/shadow. */
+body.theme-light :is(
+  .student-panel,
+  .dashboard-section-card,
+  .dashboard-stat-card,
+  .registration-workflow
+) {
+  border-color: #d9e6fb !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(30, 58, 138, 0.07) !important;
+}
+
+body.theme-light .student-panel-title,
+body.theme-light .dashboard-panel-title {
+  color: #10284d !important;
+}
+
+/* Standard form controls across student pages. */
+body.theme-light :is(.student-form-input, .student-form-select, .student-form-textarea) {
+  min-height: 46px;
+  border-color: #d9e6fb !important;
+  background: #ffffff !important;
+  color: #10284d !important;
+}
+
+body.theme-light :is(.student-form-input, .student-form-select, .student-form-textarea):focus {
+  border-color: #315fda !important;
+  box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.14) !important;
+}
+
+/* Primary buttons use the navy background with white text. */
+body.theme-light .student-btn-primary {
+  border-color: #0b1f4d !important;
+  background: #0b1f4d !important;
+  color: #ffffff !important;
+}
+
+body.theme-light .student-btn-primary:hover {
+  border-color: #132d67 !important;
+  background: #132d67 !important;
+}
+
+/* Reserved space for async content so the layout does not jump
+   while data loads. */
+body.theme-light #dashboardHighlights {
+  min-height: 168px !important;
+}
+
+body.theme-light #profileSummaryContent {
+  min-height: 180px !important;
+}
+
+body.theme-light #pickupNotificationsContent {
+  min-height: 96px !important;
+}
+
+body.theme-light .student-table-wrap {
+  min-height: 240px !important;
+}
+
+body.theme-light .announcement-feature-card {
+  min-height: 96px !important;
+}
+
+body.theme-light #announcementList {
+  min-height: 120px !important;
+}
+
+/* ---------------------------------------------------------------
+   Student Request module (Registration Workflow) - unified card
+   --------------------------------------------------------------- */
+
+.registration-workflow {
+  border-radius: 0 0 28px 28px;
+  padding: 1.25rem;
+}
+
+.registration-step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+#registrationStepper {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.registration-step-label {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #c6d4e3;
+  border-radius: 9999px;
+  background: #eef3f9;
+  color: #173b6d;
+  padding: 0.32rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.registration-stepper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.registration-step {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.35rem;
+  cursor: pointer;
+}
+
+.registration-step::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: #d9e3ef;
+  z-index: 0;
+}
+
+.registration-step:first-child::before {
+  display: none;
+}
+
+.registration-step.is-completed::before,
+.registration-step.is-current::before {
+  background: #315fda;
+}
+
+.registration-step-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #c6d4e3;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #7c8da7;
+  font-size: 0.85rem;
+  font-weight: 800;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.registration-step-check {
+  width: 18px;
+  height: 18px;
+}
+
+.registration-step-text {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  color: #7c8da7;
+}
+
+.registration-step.is-completed .registration-step-node {
+  border-color: #315fda;
+  background: #315fda;
+  color: #ffffff;
+}
+
+.registration-step.is-completed .registration-step-text {
+  color: #5b6f8e;
+}
+
+.registration-step.is-current .registration-step-node {
+  border-color: #315fda;
+  background: var(--user-navy-strong);
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.4), 0 0 0 6px rgba(49, 95, 218, 0.14);
+}
+
+.registration-step.is-current .registration-step-text {
+  color: var(--user-navy-strong);
+}
+
+.registration-stepper.is-locked .registration-step {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+#registrationStatusMessage {
+  display: block;
+  width: 100%;
+  margin: 1rem 0 0;
+  border: 1px solid;
+  border-radius: 0.7rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+#registrationStatusMessage:empty {
+  display: none;
+}
+
+.dashboard-inline-message {
+  width: 100%;
+  border: 1px solid;
+  border-radius: 0.7rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.dashboard-inline-message--pending {
+  border-color: #facc15;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.dashboard-inline-message--approved {
+  border-color: #86efac;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.dashboard-inline-message--rejected,
+.dashboard-inline-message--error {
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.dashboard-inline-message--default {
+  border-color: var(--user-border);
+  background: #f8fafc;
+  color: var(--user-text-soft);
+}
+
+.dashboard-orf-message {
+  border: 1px solid #fcd34d;
+  border-radius: 0.6rem;
+  background: #fffbeb;
+  color: #92400e;
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.dashboard-orf-message--amber {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.dashboard-orf-message--blue {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.dashboard-orf-message--green {
+  border-color: #86efac;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.dashboard-orf-message--red {
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+#completeRegistrationForm {
+  margin-top: 1.25rem;
+}
+
+#registrationStepPanels {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.registration-step-card {
+  border: 1px solid var(--user-border);
+  border-radius: 1.1rem;
+  background: linear-gradient(180deg, #fbfdff 0%, #f6f9ff 100%);
+  padding: 1.25rem 1.35rem;
+}
+
+.registration-step-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e6edf6;
+}
+
+.registration-step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #eef3f9;
+  color: #173b6d;
+}
+
+.registration-step-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.registration-step-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--user-navy-strong);
+}
+
+.registration-step-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.registration-card {
+  border: 1px solid var(--user-border);
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--user-shadow-soft);
+}
+
+.registration-card-title {
+  margin: 0 0 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #17357f;
+}
+
+.registration-orf-upload-card,
+.registration-orf-preview-card,
+.registration-window-card,
+.registration-selected-card,
+.registration-summary-card,
+.registration-uniform-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-file-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px dashed #c6d4e3;
+  border-radius: 0.7rem;
+  background: #f8fbff;
+  color: #173b6d;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.registration-file-name {
+  display: block;
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--user-text-soft);
+}
+
+.registration-file-hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--user-text-muted);
+}
+
+.registration-orf-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 150px;
+  border: 1px dashed #c6d4e3;
+  border-radius: 0.8rem;
+  background: #f8fbff;
+  padding: 1rem;
+}
+
+.registration-orf-preview--empty {
+  flex-direction: column;
+  gap: 0.6rem;
+  color: var(--user-text-muted);
+  text-align: center;
+}
+
+.registration-orf-preview--empty .registration-orf-empty-icon {
+  width: 32px;
+  height: 32px;
+  color: #b9c8e0;
+}
+
+.registration-orf-preview--empty p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.registration-orf-message {
+  border: 1px solid #fcd34d;
+  border-radius: 0.6rem;
+  background: #fffbeb;
+  color: #92400e;
+  margin-top: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.registration-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.registration-info-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.registration-required {
+  color: #dc2626;
+  margin-left: 0.15rem;
+}
+
+.registration-info-field input,
+.registration-info-field select,
+.registration-info-field textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #d7e0ec;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  color: #10284d;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.registration-info-field textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.registration-info-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6f8e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 15px;
+  padding-right: 2.3rem;
+}
+
+.registration-info-field input:focus,
+.registration-info-field select:focus,
+.registration-info-field textarea:focus {
+  border-color: #315fda;
+  box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.14);
+}
+
+.registration-uniform-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.registration-catalog-list {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.registration-catalog-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #e6edf6;
+  border-radius: 0.6rem;
+  background: #f8fbff;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.registration-catalog-list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #315fda;
+}
+
+.registration-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  align-self: flex-start;
+  min-height: 38px;
+  padding: 0.45rem 1rem;
+  border: 1px solid #c6d4e3;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  color: #173b6d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.registration-add-btn::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  border-radius: 3px;
+  background: #fde047;
+}
+
+.registration-add-btn:hover {
+  border-color: #315fda;
+  background: #f5f8fc;
+}
+
+.registration-add-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.32);
+}
+
+.registration-empty-state {
+  display: none;
+  margin: 0 0 0.4rem;
+  padding: 0.9rem;
+  border: 1px dashed #c6d4e3;
+  border-radius: 0.7rem;
+  background: #f8fbff;
+  color: var(--user-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+#moduleRows:not(:has(.dashboard-request-row)) + #moduleEmptyState,
+#bookRows:not(:has(.dashboard-request-row)) + #bookEmptyState {
+  display: block;
+}
+
+.registration-summary-metrics {
+  margin-bottom: 1rem;
+}
+
+.registration-summary-detail {
+  border: 1px solid #e6edf6;
+  border-radius: 0.8rem;
+  background: #f8fbff;
+  padding: 0.85rem 0.95rem;
+}
+
+.registration-summary-subtitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #17357f;
+}
+
+.registration-summary-detail #registrationSummaryText {
+  font-size: 0.76rem;
+}
+
+.registration-workflow-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid #edf2f7;
+  margin-top: 28px;
+  padding: 20px 24px;
+}
+
+.registration-workflow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.registration-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  background: #ffffff;
+  color: #173b6d;
+  cursor: pointer;
+  transition: filter 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.registration-nav-btn--back {
+  border-color: #c6d4e3;
+  background: #ffffff;
+  color: #173b6d;
+}
+
+.registration-nav-btn--back:hover {
+  border-color: #b0c2da;
+  background: #f5f8fc;
+}
+
+.registration-nav-btn--primary {
+  border-color: #0b1f4d;
+  background: #0b1f4d;
+  color: #ffffff;
+}
+
+.registration-nav-btn--primary:hover {
+  border-color: #132d67;
+  background: #132d67;
+}
+
+.registration-workflow-footer .registration-nav-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.32);
+}
+
+.user-info-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid #fca5a5;
+  border-radius: 0.75rem;
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.user-info-error.hidden {
+  display: none;
+}
+
+.user-info-error-retry {
+  flex-shrink: 0;
+  border: 1px solid #fca5a5;
+  border-radius: 0.5rem;
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.user-info-error-retry:hover {
+  background: #fecaca;
+  color: #7f1d1d;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .registration-step-grid {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .registration-workflow {
+    padding: 1rem;
+  }
+
+  .registration-step-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .registration-step-label {
+    align-self: flex-end;
+  }
+
+  #registrationStepper {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .registration-step {
+    flex: 0 0 auto;
+    min-width: 104px;
+  }
+
+  .registration-step::before {
+    display: none;
+  }
+
+  .registration-step-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #registrationSummaryCards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .registration-workflow-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .registration-workflow-footer .registration-workflow-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .registration-workflow-footer .registration-nav-btn,
+  .registration-workflow-footer .registration-workflow-actions .registration-nav-btn {
+    width: 100%;
+  }
+}
+
+.student-btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.item-field-error {
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+.item-min-hint {
+  color: #5a6f8d;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+@keyframes student-item-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.student-item-row.is-new {
+  animation: student-item-row-in 0.18s ease-out;
+}
+
+.item-empty-state {
+  color: #5a6f8d;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+/* ============================================================
+   student-shell-refresh
+   Header controls match the admin header (admin.css
+   modern-admin-refresh): square translucent bell, pill clock,
+   36px avatar. The menu button, profile menu and notifications
+   panel themselves are styled in app-shell.css.
+   ============================================================ */
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .header-right {
+  gap: 10px;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-bell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-bell:hover,
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-bell[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(253, 224, 71, 0.6);
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 0.9rem;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) :is(.dashboard-clock, .student-clock) {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Greeting, clock and role text sized like the admin header, so both roles
+   share one header (the pages' own styles set a 1.7rem greeting, a 305px
+   clock and an uppercase role line). */
+body.theme-light :is(.dashboard-topbar, .student-topbar) :is(.dashboard-welcome, .student-welcome) {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) :is(.dashboard-clock, .student-clock) {
+  width: auto;
+  min-width: 0;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-profile-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+body.theme-light :is(.dashboard-topbar, .student-topbar) .student-profile-role {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* 64px row + the topbar's 1px border = 65px, the same height as the admin
+   header and the sidebar's logo block (app-shell.css --shell-header-h), so
+   the sidebar divider and the header edge form one line. */
+body.theme-light :is(.dashboard-header-inner, .student-header-inner) {
+  min-height: 64px;
+}
+
+@media (min-width: 1024px) {
+  body.theme-light :is(.dashboard-header-inner, .student-header-inner) {
+    flex-wrap: nowrap;
+    height: 64px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  body.theme-light :is(.dashboard-header-inner, .student-header-inner) > .header-left {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Cards and title bars share the admin card language: 18px corners, the
+   gold accent before each module title. */
+body.theme-light :is(
+  .student-panel,
+  .dashboard-section-card,
+  .dashboard-stat-card,
+  .registration-workflow,
+  .pickup-metric-card,
+  .pickup-table-wrap,
+  .announcement-card,
+  .schedule-empty-state
+) {
+  border-radius: 18px !important;
+}
+
+body.theme-light .student-table-wrap {
+  border-radius: 14px !important;
+}
+
+/* Feedback draws its section titles with its own header class. */
+body.theme-light .feedback-card-header {
+  display: flex;
+  align-items: center;
+  border-radius: 18px 18px 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+body.theme-light .module-title-bar::before,
+body.theme-light .feedback-card-header::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 18px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background: #F4C542;
+}

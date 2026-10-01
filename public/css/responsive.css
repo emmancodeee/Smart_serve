@@ -1,0 +1,326 @@
+/* ============================================
+   SmartServe Responsive Styles
+   Shared across all pages
+   ============================================ */
+
+/* --- Hamburger Drawer --- */
+.drawer-checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.drawer-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.drawer-toggle svg {
+  width: 26px;
+  height: 26px;
+}
+
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.drawer-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
+  width: 280px;
+  max-width: 80vw;
+  background: linear-gradient(180deg, #17357f 0%, #2447a8 54%, #315fda 100%);
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+}
+
+.drawer-checkbox:checked ~ .drawer-overlay {
+  display: block;
+}
+
+.drawer-checkbox:checked ~ .drawer-sidebar {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .drawer-toggle {
+    display: none !important;
+  }
+
+  .drawer-overlay {
+    display: none !important;
+  }
+
+  .drawer-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 270px;
+    transform: none;
+    transition: none;
+    box-shadow: 12px 0 32px rgba(23, 53, 127, 0.18);
+  }
+}
+
+/* --- Responsive Tables --- */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 600px;
+  width: 100%;
+}
+
+.table-scroll thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.table-scroll th,
+.table-scroll td {
+  white-space: nowrap;
+}
+
+.scroll-hint {
+  display: none;
+  font-size: 0.75rem;
+  color: #64748b;
+  padding: 0.25rem 0.5rem;
+  text-align: right;
+}
+
+@media (max-width: 639px) {
+  .scroll-hint {
+    display: block;
+  }
+}
+
+/* --- Responsive Forms --- */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea,
+  button,
+  .btn,
+  [class*="btn-"] {
+    min-height: 44px;
+  }
+
+  .form-row,
+  [class*="grid-cols-"][class*="gap"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-group.full {
+    grid-column: 1 !important;
+  }
+}
+
+/* --- Full-Screen Modals on Mobile --- */
+@media (max-width: 639px) {
+  .modal-content,
+  [class*="max-w-"]:not(.drawer-sidebar) {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  .modal,
+  [class*="fixed"][class*="inset-0"] {
+    align-items: flex-start !important;
+    padding: 0 !important;
+  }
+}
+
+/* --- Action Buttons in Tables --- */
+@media (max-width: 639px) {
+  .table-scroll td:last-child {
+    min-width: 100px;
+  }
+
+  .table-scroll td:last-child button,
+  .table-scroll td:last-child a,
+  .table-scroll td:last-child .btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.75rem;
+    min-height: 32px;
+  }
+}
+
+/* --- Registration 5-step stepper (mobile) --- */
+@media (max-width: 639px) {
+  .registration-step-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .registration-step-label {
+    align-self: flex-end;
+  }
+
+  #registrationStepper {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .registration-step {
+    flex: 0 0 auto;
+    min-width: 104px;
+  }
+
+  .registration-step::before {
+    display: none;
+  }
+
+  .registration-step-grid,
+  .registration-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-workflow-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .registration-workflow-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .registration-workflow-actions button,
+  .registration-workflow-footer > button {
+    width: 100%;
+  }
+
+  #registrationSummaryCards {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --- Compact Header --- */
+@media (max-width: 1023px) {
+  .dashboard-topbar .dashboard-header-inner,
+  .student-topbar .student-header-inner {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+    gap: 0.4rem !important;
+  }
+
+  .dashboard-header-inner > *,
+  .student-header-inner > * {
+    gap: 0.4rem !important;
+  }
+
+  .dashboard-welcome,
+  .student-welcome {
+    font-size: 1.1rem !important;
+  }
+
+  .dashboard-status-pill,
+  .student-status-pill {
+    padding: 0.25rem 0.75rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .dashboard-clock,
+  .student-clock {
+    min-width: 0 !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.72rem !important;
+    min-height: 30px;
+  }
+
+  .dashboard-logout,
+  .student-logout {
+    min-width: 0 !important;
+    padding: 0.35rem 0.85rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .admin-header .mx-auto {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+    gap: 0.4rem !important;
+  }
+
+  .admin-clock {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.72rem !important;
+    min-height: 30px;
+  }
+
+  .admin-logout {
+    padding: 0.35rem 0.85rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .sidebar-shell .flex.items-center.gap-4 {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+
+  .sidebar-shell h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .sidebar-shell .h-14.w-14 {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  .sidebar-shell .h-14.w-14 svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+
+  .sidebar-shell li a,
+  .dashboard-sidebar-link {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .admin-nav-link {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* --- Schedule Mobile Tweaks --- */
+@media (max-width: 639px) {
+  .schedule-sidebar {
+    display: none;
+  }
+
+  [class*="view-controls"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .schedule-date-input {
+    grid-column: 1 / -1;
+  }
+}

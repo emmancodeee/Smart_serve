@@ -1,0 +1,912 @@
+/* ============== Toast Notification Styles ============== */
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: toastSlideIn 0.3s ease;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.toast-message {
+  flex: 1;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.2rem;
+  transition: color 0.2s;
+}
+
+.toast-close:hover {
+  color: #fff;
+}
+
+.toast-fade-out {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============== Loading Spinner ============== */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============== Unit of Measure Label ============== */
+.uom-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ============== Sort Arrows ============== */
+.sort-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.3rem;
+  vertical-align: middle;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.4);
+  transition: border-color 0.2s;
+}
+
+.sort-asc {
+  border-top: none;
+  border-bottom: 6px solid #fbbf24;
+}
+
+.sort-desc {
+  border-top: 6px solid #fbbf24;
+}
+
+[data-sort]:hover .sort-arrow {
+  border-top-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============== Table Toolbar ============== */
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ============== Pagination Bar ============== */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  flex-wrap: wrap;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+.pagination-info {
+  font-size: 0.85rem;
+  color: #475569;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  padding: 0.45rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============== Inventory Summary Cards ==============
+   Removed: now using admin.css .stat-card + .analytics-grid */
+
+/* ── Toolbar ─────────────────────────────────────────────────────── */
+
+.inventory-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.inventory-toolbar .search-box {
+  flex: 1;
+  min-width: 200px;
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 0.9rem;
+  color: #0F172A;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventory-toolbar .search-box::placeholder {
+  color: #94A3B8;
+}
+
+.inventory-toolbar .search-box:focus {
+  border-color: #2747A6;
+  box-shadow: 0 0 0 3px rgba(39,71,166,0.1);
+}
+
+.inventory-toolbar .filter-select {
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 0.9rem;
+  color: #0F172A;
+  outline: none;
+  min-width: 160px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: auto;
+}
+
+.inventory-toolbar .filter-select:focus {
+  border-color: #2747A6;
+  box-shadow: 0 0 0 3px rgba(39,71,166,0.1);
+}
+
+.inventory-toolbar .btn-add-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 12px;
+  background: #F4C542;
+  color: #183575;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(244,197,66,0.25);
+}
+
+.inventory-toolbar .btn-add-item:hover {
+  background: #F59E0B;
+  transform: translateY(-1px);
+}
+
+.inventory-toolbar .btn-add-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Inventory Table ─────────────────────────────────────────────── */
+
+.inventory-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #E5E7EB;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.col-item-name { width: 30%; }
+.col-category { width: 14%; }
+.col-quantity { width: 12%; }
+.col-stock { width: 14%; }
+.col-date { width: 14%; }
+.col-actions { width: 130px; }
+
+@media (max-width: 768px) {
+  .col-item-name { width: 30%; }
+  .col-category { width: 15%; }
+  .col-quantity { width: 13%; }
+  .col-stock { width: 15%; }
+  .col-date { width: 15%; }
+  .col-actions { width: 110px; }
+}
+
+.inventory-table thead {
+  background: #1E2F73;
+}
+
+.inventory-table th {
+  padding: 14px 24px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.inventory-table th.col-qty {
+  text-align: center;
+}
+
+.inventory-table th.col-actions {
+  text-align: right;
+  width: 120px;
+}
+
+.inventory-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #0F172A;
+  font-size: 0.9rem;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.inventory-table tbody tr {
+  height: 72px;
+  transition: background 0.15s ease;
+  background: #ffffff;
+}
+
+.inventory-table tbody tr:hover {
+  background: #F8FAFC;
+}
+
+.inventory-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.inventory-table td.cell-qty {
+  text-align: center;
+  font-weight: 600;
+}
+
+.inventory-table td.cell-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Status Indicators ───────────────────────────────────────────── */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.status-label {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.status-dot.status-green {
+  background: #22C55E;
+}
+
+.status-dot.status-orange {
+  background: #F59E0B;
+}
+
+.status-dot.status-red {
+  background: #EF4444;
+}
+
+.status-label.status-in-stock {
+  color: #16A34A;
+}
+
+.status-label.status-low-stock {
+  color: #D97706;
+}
+
+.status-label.status-out-of-stock {
+  color: #DC2626;
+}
+
+/* ── Category Badges ─────────────────────────────────────────────── */
+
+.cat-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cat-badge.books {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.cat-badge.modules {
+  background: #EDE9FE;
+  color: #6D28D9;
+}
+
+.cat-badge.uniforms {
+  background: #FEF3C7;
+  color: #B45309;
+}
+
+.cat-badge.electronics {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.cat-badge.stationery {
+  background: #F1F5F9;
+  color: #475569;
+}
+
+.cat-badge.other {
+  background: #F1F5F9;
+  color: #64748B;
+}
+
+/* ── Icon Action Buttons ─────────────────────────────────────────── */
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.icon-btn + .icon-btn {
+  margin-left: 6px;
+}
+
+.icon-btn:hover {
+  transform: translateY(-1px);
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-btn-edit {
+  background: rgba(59,130,246,0.12);
+  color: #2563EB;
+}
+
+.icon-btn-edit:hover {
+  background: rgba(59,130,246,0.2);
+}
+
+.icon-btn-delete {
+  background: rgba(239,68,68,0.12);
+  color: #DC2626;
+}
+
+.icon-btn-delete:hover {
+  background: rgba(239,68,68,0.2);
+}
+
+/* ── Header Profile Overrides (Dark Header) ──────────────────────── */
+
+.admin-page .admin-header .admin-profile .profile-name {
+  color: #ffffff;
+}
+
+.admin-page .admin-header .admin-profile .profile-role {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admin-page .admin-header .admin-profile .profile-avatar {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* ── Information Banner ==============
+   Removed: now using admin.css .admin-alert */
+
+/* ── Inventory List Card ==============
+   Removed: now using admin.css .section-header-bar + .section-body */
+
+/* ── Table Wrapper ───────────────────────────────────────────────── */
+
+.table-wrapper {
+  border: 1px solid #E5E7EB;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* ── Form Row (Edit Modal) ───────────────────────────────────────── */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Add Item Modal ──────────────────────────────────────────────── */
+
+#addItemModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(15,23,42,0.45);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+#addItemModal.open {
+  display: flex;
+}
+
+#addItemModal .modal-content-inner {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.2s ease;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+#addItemModal .modal-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+#addItemModal .modal-header-inner h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+#addItemModal .modal-close-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#addItemModal .modal-close-btn:hover {
+  background: #F1F5F9;
+}
+
+#addItemModal .modal-close-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+#addItemModal .modal-body-inner {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#addItemModal .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#addItemModal .form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+#addItemModal .form-group input,
+#addItemModal .form-group select {
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #0F172A;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+#addItemModal .form-group input:focus,
+#addItemModal .form-group select:focus {
+  border-color: #2747A6;
+  box-shadow: 0 0 0 3px rgba(39,71,166,0.1);
+}
+
+#addItemModal .form-row-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+#addItemModal .modal-footer-inner {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #F1F5F9;
+}
+
+#addItemModal .modal-footer-inner .btn-cancel {
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #64748B;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#addItemModal .modal-footer-inner .btn-cancel:hover {
+  background: #F8FAFC;
+}
+
+#addItemModal .modal-footer-inner .btn-submit {
+  height: 44px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 12px;
+  background: #F4C542;
+  color: #183575;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+#addItemModal .modal-footer-inner .btn-submit:hover {
+  background: #F59E0B;
+  transform: translateY(-1px);
+}
+
+/* ── Edit Modal Footer ───────────────────────────────────────────── */
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #F1F5F9;
+}
+
+/* ── Generic Modal Classes (Edit Modal) ──────────────────────────── */
+
+.modal-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.modal-header-inner h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #64748B;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: #F1F5F9;
+}
+
+.modal-close-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modal-body-inner {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-body-inner .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-body-inner .form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.modal-body-inner .form-group input,
+.modal-body-inner .form-group select {
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #0F172A;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.modal-body-inner .form-group input:focus,
+.modal-body-inner .form-group select:focus {
+  border-color: #2747A6;
+  box-shadow: 0 0 0 3px rgba(39,71,166,0.1);
+}
+
+.modal-body-inner .form-row-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.modal-body-inner .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Edit Modal ──────────────────────────────────────────────────── */
+
+#editModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(15,23,42,0.45);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+#editModal.open {
+  display: flex;
+}
+
+#editModal .modal-content-inner {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.2s ease;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .inventory-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .inventory-toolbar .search-box {
+    min-width: 100%;
+    order: 1;
+  }
+
+  .inventory-toolbar .filter-select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .inventory-toolbar .btn-add-item {
+    order: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .inventory-toolbar .btn-add-item {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .inventory-table td {
+    padding: 14px 16px;
+  }
+
+  .inventory-table th {
+    padding: 12px 16px;
+  }
+
+  #addItemModal .form-row-duo,
+  #editModal .form-row-duo,
+  #editModal .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .inventory-toolbar .filter-select {
+    width: 100%;
+  }
+
+  .inventory-toolbar .btn-add-item {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pagination-bar {
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .pagination-info {
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+  }
+}

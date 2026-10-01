@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css?v=NAV1B4D2">
+  <link rel="stylesheet" href="/css/app-shell.css">
+  <script src="/js/app-shell.js"></script>
+  <script src="/js/ui-kit.js"></script>
+</head>
+<body class="admin-page min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">Skip to main content</a>
+  
+  <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_24%),linear-gradient(180deg,#f7fbff_0%,#eef4fb_100%)] lg:flex">
+  
+  
+  <!-- Overlay for mobile sidebar -->
+  <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/50 z-40 hidden" aria-hidden="true"></div>
+  
+  <nav id="sidebar" class="sidebar-shell app-sidebar w-full border-r border-white/20 bg-gradient-to-b from-[#17357f] via-[#2447a8] to-[#315fda] text-white shadow-[12px_0_32px_rgba(23,53,127,0.18)] lg:fixed lg:inset-y-0 lg:w-[270px] lg:overflow-y-auto lg:translate-x-0 fixed inset-y-0 left-0 w-[270px] transform -translate-x-full transition-transform duration-300 ease-in-out z-40" style="background:linear-gradient(180deg,#17357f 0%,#2447a8 54%,#315fda 100%);" aria-label="Main navigation">
+    <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+      <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+        <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+          <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+          <path d="M19 10v5"></path>
+        </svg>
+      </span>
+      <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+    </div>
+    <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-admin-nav></ul>
+  </nav>
+
+  <div id="main-content" class="main-content-shell app-main w-full min-w-0 lg:ml-[270px]">
+    <header class="admin-header app-header sticky top-0 z-20 bg-[#152c69] text-white shadow-lg" role="banner">
+      <div class="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
+        <div class="header-left flex items-center gap-4">
+          <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <span id="headerGreeting" class="header-greeting"></span>
+          <span id="headerClock" class="admin-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+        </div>
+        <div class="header-right">
+          <div class="app-notifications" data-notifications>
+            <button type="button" class="header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              <span class="bell-badge" data-notifications-badge hidden></span>
+            </button>
+            <div class="app-notifications-panel" data-notifications-panel hidden></div>
+          </div>
+          <div class="app-profile-menu" data-profile-menu>
+            <button type="button" class="admin-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+              <span class="profile-avatar" id="profileAvatar">A</span>
+              <span class="profile-info">
+                <span class="profile-name" id="profileName">Admin</span>
+                <span class="profile-role" id="profileRole">Administrator</span>
+              </span>
+              <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+              <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-main mx-auto grid max-w-[1280px] gap-5 px-4 pb-8 pt-5 md:px-6" role="main">
+      <section id="analytics" class="admin-section" style="display:none;" aria-labelledby="analytics-heading">
+        <h2 id="analytics-heading" class="text-xl font-semibold">Inventory Overview</h2>
+        <div id="analyticsFilterContainer"></div>
+
+        <div class="analytics-section-body">
+        <div class="analytics-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-label">Units Available</div>
+              <span class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4 7.55 4.24a1 1 0 0 0-1.1 0L5 5.08"/><path d="M6 16.08a1 1 0 0 0 .5.86L14.5 21a1 1 0 0 0 1.1 0l6.85-4.16"/><path d="M9.5 7.88 4.05 10.7a1 1 0 0 0-.55.9v5.8a1 1 0 0 0 .55.9L9.5 21.2a1 1 0 0 0 .9 0l5.4-3.12"/><path d="M17.4 18.2 22 15.4V9.6"/><path d="M10.5 12.1 15 14.6"/><path d="M15 11.6V21"/><path d="M20.96 16.48 15 14.12"/></svg></span>
+            </div>
+            <div class="stat-value" id="totalStockUnits">0</div>
+            <div class="stat-change" id="totalStockUnitsHint">Current quantity across tracked inventory</div>
+            <svg id="totalStockUnitsSparkline" class="stat-sparkline stat-sparkline--lg" viewBox="0 0 120 28" aria-label="Tracked stock trend"></svg>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-label" id="unitsIssuedLabel">Units Distributed (30 Days)</div>
+              <span class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"/><polygon points="6 15 12 9 18 15"/></svg></span>
+            </div>
+            <div class="stat-value" id="unitsIssued">0</div>
+            <div class="stat-change" id="unitsIssuedChange">0%</div>
+            <svg id="usageSparkline" class="stat-sparkline stat-sparkline--lg" viewBox="0 0 120 28" aria-label="Issued units trend"></svg>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-label" id="forecastedDemandLabel">Projected Demand</div>
+              <span class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+            </div>
+            <div class="stat-value" id="forecastedDemand">0</div>
+            <div class="stat-change" id="forecastedDemandHint">Projected units for the next 30 days</div>
+            <svg id="forecastedDemandSparkline" class="stat-sparkline stat-sparkline--lg" viewBox="0 0 120 28" aria-label="Projected demand trend"></svg>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-label">Items Below Reorder Point</div>
+              <span class="stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+            </div>
+            <div class="stat-value" id="lowStockItems">0</div>
+            <div class="stat-change" id="lowStockItemsHint">Need reorder attention</div>
+            <svg id="lowStockItemsSparkline" class="stat-sparkline stat-sparkline--lg" viewBox="0 0 120 28" aria-label="Stock removals trend"></svg>
+          </div>
+        </div>
+
+        <div class="charts-container">
+          <div class="chart-box">
+            <h3>Items Given Out</h3>
+            <div id="issuedTrendChart" class="chart"></div>
+          </div>
+          <div class="chart-box">
+            <h3>Most Requested Items</h3>
+            <div id="productComparisonChart" class="chart"></div>
+          </div>
+          <div class="chart-box">
+            <h3>Low Stock Items</h3>
+            <div id="inventoryHealthChart" class="chart"></div>
+          </div>
+          <div class="chart-box">
+            <h3>Active Courses</h3>
+            <div id="cohortDistributionChart" class="chart"></div>
+          </div>
+          <div class="chart-box">
+            <h3>Request Status Distribution</h3>
+            <div id="requestStatusChart" class="chart"><div class="chart-skeleton" aria-hidden="true"></div></div>
+          </div>
+          <div class="chart-box">
+            <h3>Requests by Item Category</h3>
+            <div id="categoryRequestsChart" class="chart"><div class="chart-skeleton" aria-hidden="true"></div></div>
+          </div>
+          <div class="chart-box">
+            <h3>Upcoming Demand</h3>
+            <div id="planningForecastChart" class="chart"></div>
+          </div>
+          <div class="chart-box">
+            <h3>Inventory Changes</h3>
+            <div id="adminOperationsChart" class="chart"></div>
+          </div>
+          <div class="chart-box chart-box--wide" id="pickupCompletionBox">
+            <h3>Pickup Completion Rate</h3>
+            <div class="pickup-kpi">
+              <span class="pickup-kpi-label">Pickup Completion Rate</span>
+              <span class="pickup-kpi-value" id="pickupCompletionRateValue">—</span>
+            </div>
+            <div id="pickupCompletionChart" class="chart chart--wide"><div class="chart-skeleton" aria-hidden="true"></div></div>
+          </div>
+        </div>
+
+        <div class="summary-box admin-surface-block">
+          <h3>Operational Summary</h3>
+          <div id="analyticsKpis" role="region" aria-label="Operational summary"></div>
+        </div>
+        </div>
+
+      </section>
+
+      <section id="announcements" class="admin-section" style="display:none; margin-bottom: 2.5rem;">
+        <div class="section-header-row">
+          <h2>Announcement Management</h2>
+        </div>
+        <div id="announcementsFilterContainer"></div>
+
+        <div class="admin-surface-block mb-4" style="padding: 1rem;">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 style="margin: 0 0 0.35rem; color: #0b1f4d; font-size: 1rem; font-weight: 800;">Create or Edit Announcement</h3>
+            </div>
+            <button id="cancelAnnouncementEditBtn" type="button" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100" style="display:none;">Cancel Edit</button>
+          </div>
+
+          <form id="announcementForm" class="mt-4 grid gap-3 md:grid-cols-2" autocomplete="off">
+            <input type="hidden" id="announcementId">
+            <div>
+              <label for="announcementTitle" class="admin-field-label">Announcement title</label>
+              <input type="text" id="announcementTitle" placeholder="Announcement title" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="announcementCategory" class="admin-field-label">Category</label>
+              <input type="text" id="announcementCategory" placeholder="Category (for example: General, Enrollment, Events)" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div>
+              <label for="announcementPriority" class="admin-field-label">Priority level</label>
+              <select id="announcementPriority" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                <option value="medium">Medium priority</option>
+                <option value="low">Low priority</option>
+                <option value="high">High priority</option>
+                <option value="critical">Critical priority</option>
+              </select>
+            </div>
+            <div>
+              <label for="announcementExpiresAt" class="admin-field-label">Expiration date</label>
+              <input type="datetime-local" id="announcementExpiresAt" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="md:col-span-2">
+              <label for="announcementContent" class="admin-field-label">Announcement content</label>
+              <textarea id="announcementContent" rows="5" placeholder="Write the announcement details for students..." class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true"></textarea>
+            </div>
+            <div class="md:col-span-2 flex flex-wrap items-center gap-3">
+              <button id="announcementSubmitBtn" type="submit" class="inline-flex items-center justify-center rounded-xl bg-[#0b1f4d] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#132d67] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-1">Create Announcement</button>
+              <p id="announcementFormMessage" class="text-sm font-medium text-slate-600"></p>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table id="announcementsTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Published</th>
+                <th>Expires</th>
+                <th>Author</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7" class="table-loading-state">Loading announcements...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="adminAccountsAccessGate" class="admin-section" style="display:none; margin-bottom: 2.5rem;">
+        <div class="section-header-row">
+          <h2>Verify to Access Admin Accounts</h2>
+        </div>
+        <div class="admin-surface-block" style="padding: 1.75rem;">
+          <p class="text-sm text-slate-600" style="margin: 0 0 1.25rem; max-width: 34rem;">This area manages administrator accounts. Re-enter your Super Admin email and password to continue.</p>
+          <form id="adminAccountsAccessGateForm" class="grid gap-4 md:grid-cols-2" autocomplete="off" novalidate>
+            <div>
+              <label for="adminGateEmail" class="admin-field-label">Super Admin email</label>
+              <input type="email" id="adminGateEmail" placeholder="Super Admin email" autocomplete="username" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="adminGatePassword" class="admin-field-label">Password</label>
+              <div class="relative">
+                <input type="password" id="adminGatePassword" placeholder="Password" autocomplete="current-password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 pr-11 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+                <button type="button" id="adminGatePasswordToggle" class="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-lg p-1.5 text-slate-500 transition duration-200 hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-yellow-300" aria-label="Show password" aria-pressed="false">
+                  <svg id="adminGateEyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                  <svg id="adminGateEyeOffIcon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="md:col-span-2 flex flex-wrap items-center gap-3">
+              <button type="submit" id="adminGateVerifyBtn" class="inline-flex items-center justify-center rounded-xl bg-[#0b1f4d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#132d67] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-1">
+                <span class="admin-gate-btn-text">Verify Access</span>
+                <svg class="admin-gate-btn-spinner ml-2 h-4 w-4 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </button>
+              <p id="adminGateMessage" class="text-sm font-medium text-slate-600" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="adminAccounts" class="admin-section" style="display:none; margin-bottom: 2.5rem;">
+        <div class="section-header-row">
+          <h2>Admin Account Management</h2>
+        </div>
+        <div id="adminAccountsFilterContainer"></div>
+                <div class="admin-surface-block mb-4" style="padding: 1rem;">
+          <h3 style="margin: 0 0 0.85rem; color: #0b1f4d; font-size: 1rem; font-weight: 800;">Change My Password</h3>
+          <form id="changeAdminPasswordForm" class="grid gap-3 md:grid-cols-3" autocomplete="off">
+            <div>
+              <label for="adminOldPassword" class="admin-field-label">Current password</label>
+              <input type="password" id="adminOldPassword" placeholder="Current password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="adminNewPassword" class="admin-field-label">New password</label>
+              <input type="password" id="adminNewPassword" placeholder="New password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="adminConfirmNewPassword" class="admin-field-label">Confirm new password</label>
+              <input type="password" id="adminConfirmNewPassword" placeholder="Confirm new password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div class="md:col-span-3 flex flex-wrap items-center gap-3">
+              <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-1">Change Password</button>
+              <p id="changeAdminPasswordMessage" class="text-sm font-medium text-slate-600"></p>
+            </div>
+          </form>
+        </div>
+        <div id="superAdminTools" class="admin-surface-block" style="display:none; padding: 1rem;" role="region" aria-labelledby="superAdminToolsTitle">
+          <h3 id="superAdminToolsTitle" style="margin: 0 0 0.85rem; color: #0b1f4d; font-size: 1rem; font-weight: 800;">Create Admin Account</h3>
+          <form id="createAdminForm" class="grid gap-3 md:grid-cols-3" autocomplete="off">
+            <div>
+              <label for="newAdminName" class="admin-field-label">Admin name</label>
+              <input type="text" id="newAdminName" placeholder="Admin name" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="newAdminEmail" class="admin-field-label">Admin email</label>
+              <input type="email" id="newAdminEmail" placeholder="Admin email" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div>
+              <label for="newAdminPassword" class="admin-field-label">Temporary password</label>
+              <input type="password" id="newAdminPassword" placeholder="Temporary password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" aria-required="true">
+            </div>
+            <div class="md:col-span-3 flex flex-wrap items-center gap-3">
+              <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-[#0b1f4d] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#132d67] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-1" id="createAdminBtn">
+                <span class="create-admin-btn-text">Create Admin</span>
+                <svg class="create-admin-btn-spinner ml-2 h-4 w-4 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </button>
+              <p id="createAdminMessage" class="text-sm font-medium text-slate-600" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </div>
+        <div class="admin-table-wrap mt-4">
+          <table id="adminAccountsTable" aria-label="Admin accounts table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Last Login</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="table-loading-state">Loading admin accounts...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="users" class="admin-section" style="display:none; margin-top: 2.5rem;">
+        <div class="section-header-row">
+          <h2>Users Management</h2>
+        </div>
+        <div id="usersFilterContainer"></div>
+        <div class="admin-table-wrap">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Age</th>
+              <th>Status</th>
+              <th>Last Login</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section id="transactions" class="admin-section" style="display:none;">
+        <h2 class="text-xl font-semibold">User Request History</h2>
+        <div id="transactionsFilterContainer"></div>
+        <div class="admin-table-wrap">
+        <table id="transactionHistoryTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>User</th>
+              <th>Status</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" class="table-loading-state">Loading user request history...</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <div id="registrationsFilterWrap" class="admin-section" style="display:none;">
+        <div id="registrationsFilterContainer"></div>
+      </div>
+
+      <section id="registrationsPending" class="admin-section section-pending" style="display:none;">
+        <h2 class="text-xl font-semibold">Pending Registrations</h2>
+        <div class="admin-table-wrap">
+        <table id="registrationsTable">
+          <thead>
+            <tr>
+              <th>Student Number</th>
+              <th>Full Name</th>
+              <th>Course</th>
+              <th>Registration Summary</th>
+              <th>Last Updated</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section id="registrationsApproved" class="admin-section section-approved" style="display:none;">
+        <h2 class="text-xl font-semibold">Approved Registrations</h2>
+        <div class="admin-table-wrap">
+        <table id="approvedRegistrationsTable">
+          <thead>
+            <tr>
+              <th>Student Number</th>
+              <th>Full Name</th>
+              <th>Course</th>
+              <th>Registration Summary</th>
+              <th>Last Updated</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section id="registrationsRejected" class="admin-section section-rejected" style="display:none;">
+        <h2 class="text-xl font-semibold">Rejected Registrations</h2>
+        <div class="admin-table-wrap">
+        <table id="rejectedRegistrationsTable">
+          <thead>
+            <tr>
+              <th>Student Number</th>
+              <th>Full Name</th>
+              <th>Course</th>
+              <th>Registration Summary</th>
+              <th>Last Updated</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        </div>
+      </section>
+
+      <section id="pickupConfirmations" class="admin-section" style="display:none;">
+        <h2 class="text-xl font-semibold">Pickup Confirmations</h2>
+        <div id="pickupConfirmationsFilterContainer"></div>
+        <div class="admin-table-wrap overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table id="pickupConfirmationsTable" class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-amber-50">
+              <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Items</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Confirmation</th>
+                <th scope="col">Student</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="7" class="table-loading-state">Loading pickup confirmations...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  </div>
+
+  <div id="userDetailModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>User Details</h2>
+      <div id="userDetails"></div>
+      <button id="deleteUserBtn" class="inline-flex items-center justify-center rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1">Delete User</button>
+    </div>
+  </div>
+
+  <script src="/js/admin-nav.js?v=NAV1B4D2"></script>
+  <script src="/js/admin-filters.js?v=81D6AFB971"></script>
+  <script src="/js/admin.js?v=NAV1B4D2"></script>
+  <script src="/js/show-password.js"></script>
+</body>
+</html>

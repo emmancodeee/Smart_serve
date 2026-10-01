@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return Requests - PHINMA SmartServe</title>
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .student-shell {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+    }
+
+    .student-sidebar {
+      width: 100%;
+      background: linear-gradient(180deg, #17357f 0%, #2447a8 54%, #315fda 100%);
+    }
+
+    .student-main {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .student-header-inner,
+    .student-main-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .student-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #152c69;
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(21, 44, 105, 0.24);
+    }
+
+    .student-welcome {
+      color: #ffffff;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .student-clock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 305px;
+      padding: 0.85rem 1.35rem;
+      border: 1px solid rgba(253, 224, 71, 0.85);
+      border-radius: 1.25rem;
+      background: #1d3b86;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .student-logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 126px;
+      padding: 0.85rem 1.65rem;
+      border: 1px solid #fde047;
+      border-radius: 999px;
+      background: #ffda47;
+      color: #183575;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: 0 10px 18px rgba(250, 204, 21, 0.18);
+    }
+
+    .student-logout:hover {
+      background: #ffe069;
+    }
+
+    .student-panel {
+      border: 1px solid #d9e6fb;
+      border-radius: 28px;
+      background: #ffffff;
+      box-shadow: 0 16px 42px rgba(30, 58, 138, 0.12);
+    }
+
+    .student-panel-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #4f6b95;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .student-panel-title {
+      color: #10284d;
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .student-panel-copy {
+      margin-top: 0.3rem;
+      color: #5a6f8d;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .student-form-input,
+    .student-form-select,
+    .student-form-textarea {
+      width: 100%;
+      border: 1px solid #d9e6fb;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #10284d;
+      padding: 0.75rem 1rem;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .student-form-input:focus,
+    .student-form-select:focus,
+    .student-form-textarea:focus {
+      border-color: #315fda;
+      box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.1);
+    }
+
+    .student-form-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: #10284d;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .student-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .student-btn-primary {
+      background: #0b1f4d;
+      border: 1px solid #0b1f4d;
+      color: #ffffff;
+    }
+
+    .student-btn-primary:hover {
+      background: #132d67;
+      border-color: #132d67;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(11, 31, 77, 0.2);
+    }
+
+    .student-btn-secondary {
+      background: #ffffff;
+      border: 1px solid #d9e6fb;
+      color: #10284d;
+    }
+
+    .student-btn-secondary:hover {
+      background: #f5f8fc;
+      border-color: #c6d4e3;
+    }
+
+    .student-btn-sm {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.78rem;
+      border-radius: 10px;
+    }
+
+    .student-btn-danger {
+      background: #ffffff;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+    }
+
+    .student-btn-danger:hover {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    .student-btn-warning {
+      background: #ffffff;
+      border: 1px solid #fde68a;
+      color: #92400e;
+    }
+
+    .student-btn-warning:hover {
+      background: #fef3c7;
+      border-color: #fcd34d;
+    }
+
+    .student-btn-info {
+      background: #ffffff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .student-btn-info:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+
+    .student-btn-success {
+      background: #ffffff;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    .student-btn-success:hover {
+      background: #ecfdf5;
+      border-color: #86efac;
+    }
+
+    .student-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #d9e6fb;
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(16, 40, 77, 0.06);
+    }
+
+    .student-table {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .student-table thead th {
+      border-bottom: 1px solid #e3ebf5;
+      background: #eef3f9;
+      color: #10284d;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 1rem 1.1rem;
+      text-align: left;
+    }
+
+    .student-table tbody td {
+      border-bottom: 1px solid #edf2f8;
+      padding: 1rem 1.1rem;
+      color: #334155;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .student-table tbody tr:nth-child(even) {
+      background: #f9fbfe;
+    }
+
+    .student-table tbody tr:hover {
+      background: #f1f6fd;
+    }
+
+    .student-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .student-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 0.42rem 0.82rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .student-badge-pending {
+      border: 1px solid #fde68a;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .student-badge-approved {
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .student-badge-completed {
+      border: 1px solid #bbf7d0;
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    .student-badge-rejected {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .student-badge-cancelled {
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .student-badge-low {
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .student-badge-medium {
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .student-badge-high {
+      border: 1px solid #fde68a;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .student-badge-urgent {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .student-badge-default {
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .student-rating-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .student-rating-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid #d9e6fb;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #10284d;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .student-rating-label:hover {
+      border-color: #315fda;
+      background: #eff6ff;
+    }
+
+    .student-rating-input:checked + .student-rating-label {
+      border-color: #0b1f4d;
+      background: #0b1f4d;
+      color: #ffffff;
+    }
+
+    .student-rating-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .student-rating-hint {
+      display: block;
+      margin-top: 0.4rem;
+      color: #5a6f8d;
+      font-size: 0.78rem;
+    }
+
+    .student-item-row {
+      border: 1px solid #d9e6fb;
+      border-radius: 14px;
+      padding: 1rem;
+      background: #f8fbff;
+    }
+
+    .return-form-card {
+      padding: 1.5rem;
+    }
+
+    .return-form-panel {
+      padding: 0;
+    }
+
+    .return-form-body {
+      padding: 1.5rem;
+    }
+
+    .return-remove-cell {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .return-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .return-actions {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    /* Modal styles */
+    .student-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 1rem;
+    }
+
+    .student-modal-overlay.is-open {
+      display: flex;
+    }
+
+    .student-modal-box {
+      width: 100%;
+      max-width: 48rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 1.5rem;
+      border: 1px solid #d9e6fb;
+      background: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .student-modal-box-sm {
+      max-width: 32rem;
+    }
+
+    .student-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1rem 1.5rem;
+    }
+
+    .student-modal-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0b1f4d;
+    }
+
+    .student-modal-close {
+      font-size: 1.5rem;
+      color: #94a3b8;
+      transition: color 0.2s ease;
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .student-modal-close:hover {
+      color: #ef4444;
+    }
+
+    .student-modal-body {
+      padding: 1.5rem;
+    }
+
+    .student-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 1rem 1.5rem;
+    }
+
+    .student-modal-footer .student-btn {
+      min-width: 100px;
+    }
+
+    .return-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .student-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Explains why the registration option is disabled (not approved, or a
+       return is already open), so the student is not left guessing. */
+    .registration-eligibility-hint {
+      margin-top: 0.45rem;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      padding: 0.55rem 0.8rem;
+    }
+
+    .registration-eligibility-hint[data-tone="error"] {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .registration-eligibility-hint[hidden] {
+      display: none;
+    }
+
+    .table-retry-btn {
+      display: flex;
+      width: fit-content;
+      margin: 0.75rem auto 0;
+    }
+
+    @media (min-width: 1024px) {
+      .student-shell {
+        display: flex;
+      }
+
+      .student-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 270px;
+        overflow-y: auto;
+      }
+
+      .student-main {
+        margin-left: 270px;
+        width: calc(100% - 270px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .student-welcome {
+        font-size: 1.3rem;
+      }
+
+      .student-clock {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .student-modal-box {
+        max-width: 100%;
+        border-radius: 1rem;
+      }
+    }
+
+      .student-page-title {
+        color: rgba(219, 234, 254, 0.85);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+      }
+
+      .student-search {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+        border-radius: 12px;
+        background: #1d3b86;
+        color: rgba(219, 234, 254, 0.8);
+      }
+
+      .student-search:focus-within {
+        border-color: #fde047;
+        box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.18);
+      }
+
+      .student-search .search-input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 0.85rem;
+        color: #ffffff;
+        width: 120px;
+      }
+
+      .student-search .search-input::placeholder {
+        color: rgba(219, 234, 254, 0.55);
+      }
+
+      .student-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .student-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ffda47;
+        color: #183575;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .student-profile-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .student-profile-name {
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .student-profile-role {
+        color: rgba(219, 234, 254, 0.75);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .student-bell {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #ffffff;
+        background: #1d3b86;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+      }
+
+      .student-bell svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .student-bell-dot {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ffda47;
+        border: 2px solid #152c69;
+      }
+
+      @media (max-width: 640px) {
+        .student-page-title {
+          font-size: 0.85rem;
+        }
+
+        .student-profile-info {
+          display: none;
+        }
+
+        .student-search .search-input {
+          width: 90px;
+        }
+      }
+  </style>
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/app-shell.css">
+  <script src="/js/app-shell.js"></script>
+  <script src="/js/ui-kit.js"></script>
+  <script src="/js/student-nav.js"></script>
+</head>
+<body class="theme-light min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+  <div id="sidebarOverlay" class="app-sidebar-overlay" aria-hidden="true"></div>
+  <div class="student-shell min-h-screen">
+    <aside id="sidebar" class="student-sidebar app-sidebar w-full border-r border-white/20 text-white">
+      <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+        <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+          <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+            <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+            <path d="M19 10v5"></path>
+          </svg>
+        </span>
+        <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+      </div>
+      <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-student-nav></ul>
+    </aside>
+
+    <div class="student-main app-main w-full min-w-0">
+      <header class="student-topbar">
+        <div class="student-header-inner flex flex-wrap items-center justify-between gap-3 px-5 py-3 md:px-7">
+          <div class="header-left flex flex-wrap items-center gap-4">
+            <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 id="returnsWelcomeText" class="student-welcome">Welcome</h1>
+            </div>
+            <span id="headerClock" class="student-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+          </div>
+          <div class="header-right flex flex-wrap items-center justify-end gap-3 sm:flex sm:items-center sm:gap-4">
+            <div class="app-notifications" data-notifications>
+              <button type="button" class="student-bell header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="student-bell-dot" data-notifications-badge hidden></span>
+              </button>
+              <div class="app-notifications-panel" data-notifications-panel hidden></div>
+            </div>
+            <div class="app-profile-menu" data-profile-menu>
+              <button type="button" class="student-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+                <span class="student-avatar" id="studentAvatar">S</span>
+                <span class="student-profile-info">
+                  <span class="student-profile-name" id="studentProfileName">Student</span>
+                  <span class="student-profile-role">Student</span>
+                </span>
+                <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+                <a class="app-menu-item" role="menuitem" href="/profile">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                  My Profile
+                </a>
+                <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="student-main-inner px-4 pb-8 pt-5 md:px-7">
+        <div class="module-title-bar mb-5">Return Request</div>
+        <div class="student-panel return-form-panel return-form-card">
+          <div class="return-form-body">
+            <form id="returnForm" class="space-y-4" novalidate>
+            <div>
+              <label for="registrationId" class="student-form-label">Registration *</label>
+              <select class="student-form-select" id="registrationId" name="registrationId" required>
+                <option value="">Select Registration</option>
+              </select>
+              <p id="registrationHint" class="registration-eligibility-hint" role="status" hidden></p>
+            </div>
+
+            <div>
+              <label class="student-form-label">Items to Return *</label>
+              <div id="itemsContainer" class="space-y-3">
+                <div class="student-item-row">
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label class="text-xs font-semibold text-[#5a6f8d]">Type *</label>
+                      <select class="student-form-select text-sm mt-1 item-type" required>
+                        <option value="">Select Type</option>
+                        <option value="module">Modules</option>
+                        <option value="uniform">Uniforms</option>
+                        <option value="books">Books</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="text-xs font-semibold text-[#5a6f8d]">Name *</label>
+                      <input type="text" class="student-form-input text-sm mt-1 item-name" required placeholder="Item name">
+                    </div>
+                    <div>
+                      <label class="text-xs font-semibold text-[#5a6f8d]">Condition *</label>
+                      <select class="student-form-select text-sm mt-1 item-condition" required>
+                        <option value="">Condition</option>
+                        <option value="excellent">Excellent</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                        <option value="damaged">Damaged</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="text-xs font-semibold text-[#5a6f8d]">Quantity</label>
+                      <input type="number" class="student-form-input text-sm mt-1 item-quantity" value="1" min="1">
+                    </div>
+                    <div>
+                      <label class="text-xs font-semibold text-[#5a6f8d]">Notes</label>
+                      <input type="text" class="student-form-input text-sm mt-1 item-notes" placeholder="Additional notes about this item">
+                    </div>
+                    <div class="return-remove-cell">
+                      <button type="button" class="student-btn student-btn-sm student-btn-danger w-full" disabled>Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p id="itemsHint" class="item-min-hint" hidden></p>
+              <button type="button" id="addItemBtn" class="student-btn student-btn-sm student-btn-secondary mt-2">+ Add Another Item</button>
+            </div>
+
+            <div>
+              <label for="reason" class="student-form-label">Reason for Return *</label>
+              <textarea class="student-form-textarea" id="reason" name="reason" rows="3" required minlength="10" placeholder="Please explain why you're returning these items..."></textarea>
+            </div>
+
+            <div>
+              <label for="details" class="student-form-label">Additional Details</label>
+              <textarea class="student-form-textarea" id="details" name="details" rows="2" placeholder="Any additional information about the return..."></textarea>
+            </div>
+
+            <div>
+              <label for="requestedReturnDate" class="student-form-label">Preferred Return Date *</label>
+              <input type="date" class="student-form-input" id="requestedReturnDate" name="requestedReturnDate" required>
+            </div>
+
+            <div>
+              <label for="priority" class="student-form-label">Priority</label>
+              <select class="student-form-select" id="priority" name="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+
+            <div class="return-actions">
+              <button type="button" id="cancelBtn" class="student-btn student-btn-secondary w-full sm:w-auto">Cancel</button>
+              <button type="submit" class="student-btn student-btn-primary w-full sm:w-auto">Submit Return Request</button>
+            </div>
+          </form>
+          </div>
+        </div>
+
+        <div class="student-panel return-form-card" id="returnHistoryPanel">
+          <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+            <div class="pl-5">
+              <p class="student-panel-eyebrow">Return History</p>
+              <h2 class="student-panel-title mt-1">My Return Requests</h2>
+            </div>
+          </div>
+          <div class="student-table-wrap">
+            <table class="student-table">
+              <thead>
+                <tr>
+                  <th>Items</th>
+                  <th>Requested Date</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="returnTableBody">
+                <tr>
+                  <td colspan="5" class="table-loading-state">Loading return requests...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Return Request Details Modal -->
+  <div class="student-modal-overlay" id="returnModal">
+    <div class="student-modal-box">
+      <div class="student-modal-header">
+        <h3 class="student-modal-title">Return Request Details</h3>
+        <button type="button" id="returnModalCloseBtn" class="student-modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="student-modal-body" id="returnModalBody">
+        <!-- Return request details will be loaded here -->
+      </div>
+      <div class="student-modal-footer">
+        <button type="button" id="returnModalFooterCloseBtn" class="student-btn student-btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="student-modal-overlay" id="feedbackModal">
+    <div class="student-modal-box student-modal-box-sm">
+      <div class="student-modal-header">
+        <h3 class="student-modal-title">Return Process Feedback</h3>
+        <button type="button" id="feedbackModalCloseBtn" class="student-modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="student-modal-body">
+        <form id="feedbackForm" class="space-y-4">
+          <div>
+            <label class="student-form-label">Rating (1-5)</label>
+            <div class="flex flex-wrap gap-2">
+              <input type="radio" class="student-rating-input" name="rating" id="retRating1" value="1">
+              <label class="student-rating-label" for="retRating1">1</label>
+              <input type="radio" class="student-rating-input" name="rating" id="retRating2" value="2">
+              <label class="student-rating-label" for="retRating2">2</label>
+              <input type="radio" class="student-rating-input" name="rating" id="retRating3" value="3">
+              <label class="student-rating-label" for="retRating3">3</label>
+              <input type="radio" class="student-rating-input" name="rating" id="retRating4" value="4">
+              <label class="student-rating-label" for="retRating4">4</label>
+              <input type="radio" class="student-rating-input" name="rating" id="retRating5" value="5">
+              <label class="student-rating-label" for="retRating5">5</label>
+            </div>
+            <span class="student-rating-hint">1 = Poor, 5 = Excellent</span>
+          </div>
+
+          <div>
+            <label for="comments" class="student-form-label">Comments</label>
+            <textarea class="student-form-textarea" id="comments" name="comments" rows="3" placeholder="Share your experience with the return process..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="student-modal-footer">
+        <button type="button" id="modalFeedbackCancelBtn" class="student-btn student-btn-secondary">Cancel</button>
+        <button type="button" id="modalFeedbackSubmitBtn" class="student-btn student-btn-primary">Submit Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Return Request Confirmation Modal -->
+  <div class="student-modal-overlay" id="cancelReturnModal">
+    <div class="student-modal-box student-modal-box-sm">
+      <div class="student-modal-header">
+        <h3 class="student-modal-title">Cancel Return Request?</h3>
+        <button type="button" class="student-modal-close" id="cancelModalCloseBtn">&times;</button>
+      </div>
+      <div class="student-modal-body">
+        <p class="text-sm text-slate-700">Are you sure you want to cancel? Your entered information will not be saved.</p>
+      </div>
+      <div class="student-modal-footer">
+        <button type="button" id="cancelContinueBtn" class="student-btn student-btn-secondary">Continue Editing</button>
+        <button type="button" id="cancelConfirmBtn" class="student-btn student-btn-danger">Cancel Request</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/student-header.js"></script>
+  <script src="/js/returns.js"></script>
+</body>
+</html>

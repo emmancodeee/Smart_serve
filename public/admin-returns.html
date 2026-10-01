@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Return Requests Management - Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dash-line: #d7e0ec;
+            --dash-line-strong: #c7d5e8;
+            --dash-surface: #ffffff;
+            --dash-surface-soft: #f7faff;
+            --dash-surface-muted: #eef3f9;
+            --dash-ink: #10284d;
+            --dash-ink-soft: #5a6f8d;
+            --dash-shadow: 0 16px 42px rgba(16, 40, 77, 0.12);
+            --dash-shadow-soft: 0 10px 24px rgba(16, 40, 77, 0.06);
+        }
+
+        .dashboard-panel {
+            border: 1px solid var(--dash-line);
+            border-radius: 24px;
+            background: var(--dash-surface);
+            box-shadow: var(--dash-shadow);
+        }
+
+        .dashboard-panel-header {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.9rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .dashboard-panel-header #returnFilterContainer {
+            width: 100%;
+        }
+
+        .dashboard-panel-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #4f6b95;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-panel-title {
+            color: var(--dash-ink);
+            font-size: 1.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .dashboard-panel-copy {
+            margin-top: 0.3rem;
+            color: var(--dash-ink-soft);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--dash-line);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.92rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #315fda;
+            box-shadow: 0 0 0 3px rgba(49, 95, 218, 0.1);
+            outline: none;
+        }
+
+        .btn {
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #315fda 0%, #2447a8 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2447a8 0%, #17357f 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(49, 95, 218, 0.3);
+        }
+
+        .btn-secondary {
+            background: #eef3f9;
+            border: 1px solid var(--dash-line);
+            color: var(--dash-ink);
+        }
+
+        .btn-secondary:hover {
+            background: #dbe6fb;
+            border-color: var(--dash-line-strong);
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--dash-shadow-soft);
+        }
+
+        .table thead th {
+            border-bottom: 1px solid #e3ebf5;
+            background: #eef3f9;
+            color: var(--dash-ink);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 1rem;
+        }
+
+        .table tbody tr {
+            background: #ffffff;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background: #f9fbfe;
+        }
+
+        .table tbody tr:hover {
+            background: #f1f6fd;
+        }
+
+        .table td {
+            border-bottom: 1px solid #edf2f8;
+            background: transparent;
+            color: #334155;
+            padding: 1rem;
+        }
+
+        .badge {
+            padding: 0.5rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .admin-data-table { width: 100%; min-width: 900px; margin-bottom: 0; }
+        .admin-data-table th:first-child { min-width: 195px; }
+        .admin-data-table th:nth-child(2) { min-width: 245px; }
+        .admin-data-table th:nth-child(3) { min-width: 150px; }
+        .admin-data-table th:nth-child(4) { min-width: 120px; }
+        .admin-data-table th:nth-child(5) { min-width: 120px; }
+        .admin-data-table th:nth-child(6) { min-width: 150px; }
+        .admin-data-table th:last-child { min-width: 270px; }
+        .admin-data-table td { vertical-align: middle; }
+        .table-responsive { -webkit-overflow-scrolling: touch; }
+        .admin-data-table .student-name { color: var(--dash-ink); font-weight: 700; }
+        .admin-data-table .student-email { display: block; margin-top: 0.18rem; overflow: hidden; color: var(--dash-ink-soft); font-size: 0.78rem; text-overflow: ellipsis; }
+        .item-summary { color: var(--dash-ink); font-weight: 600; line-height: 1.45; }
+        .item-count, .date-cell { color: var(--dash-ink-soft); font-size: 0.84rem; white-space: nowrap; }
+        .table-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 240px; }
+        .table-actions .btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; line-height: 1.2; }
+        .empty-table-state { padding: 2.5rem !important; color: var(--dash-ink-soft) !important; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .dashboard-panel-header { gap: 0.85rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/admin.css?v=NAV1B4D2">
+    <link rel="stylesheet" href="/css/app-shell.css">
+    <script src="/js/app-shell.js"></script>
+    <script src="/js/ui-kit.js"></script>
+</head>
+<body class="admin-page min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg">Skip to main content</a>
+
+    <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_24%),linear-gradient(180deg,#f7fbff_0%,#eef4fb_100%)] lg:flex">
+
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebarOverlay" class="lg:hidden fixed inset-0 bg-black/50 z-40 hidden" aria-hidden="true"></div>
+
+    <nav id="sidebar" class="sidebar-shell app-sidebar w-full border-r border-white/20 bg-gradient-to-b from-[#17357f] via-[#2447a8] to-[#315fda] text-white shadow-[12px_0_32px_rgba(23,53,127,0.18)] lg:fixed lg:inset-y-0 lg:w-[270px] lg:overflow-y-auto lg:translate-x-0 fixed inset-y-0 left-0 w-[270px] transform -translate-x-full transition-transform duration-300 ease-in-out z-40" style="background:linear-gradient(180deg,#17357f 0%,#2447a8 54%,#315fda 100%);" aria-label="Main navigation">
+        <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+                <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+                    <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+                    <path d="M19 10v5"></path>
+                </svg>
+            </span>
+            <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+        </div>
+    <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-admin-nav></ul>
+    </nav>
+
+    <div id="main-content" class="main-content-shell app-main w-full min-w-0 lg:ml-[270px]">
+        <header class="admin-header app-header sticky top-0 z-20 bg-[#152c69] text-white shadow-lg" role="banner">
+            <div class="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
+                <div class="header-left flex items-center gap-4">
+                    <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <span id="headerGreeting" class="header-greeting"></span>
+                    <span id="headerClock" class="admin-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+                </div>
+                <div class="header-right">
+                    <div class="app-notifications" data-notifications>
+                        <button type="button" class="header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                            <span class="bell-badge" data-notifications-badge hidden></span>
+                        </button>
+                        <div class="app-notifications-panel" data-notifications-panel hidden></div>
+                    </div>
+                    <div class="app-profile-menu" data-profile-menu>
+                        <button type="button" class="admin-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+                            <span class="profile-avatar" id="profileAvatar">A</span>
+                            <span class="profile-info">
+                                <span class="profile-name" id="profileName">Admin</span>
+                                <span class="profile-role" id="profileRole">Administrator</span>
+                            </span>
+                            <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+                            <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main mx-auto grid max-w-[1280px] gap-5 px-4 pb-8 pt-5 md:px-6" role="main">
+            <div class="admin-section dashboard-panel p-6">
+                <div class="dashboard-panel-header">
+                    <div>
+                        <h2 class="dashboard-panel-title">All Return Requests</h2>
+                    </div>
+                    <div id="returnFilterContainer"></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Items</th>
+                                <th>Requested Date</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="returnTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center table-loading-state">Loading return requests...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+
+    <!-- Return Request Details Modal -->
+    <div class="modal fade" id="returnModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Return Request Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="returnModalBody">
+                    <!-- Return request details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Approve Return Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="approveForm">
+                        <div class="mb-3">
+                            <label for="adminNotes" class="form-label">Admin Notes</label>
+                            <textarea class="form-control" id="adminNotes" rows="3" placeholder="Add any notes about this approval..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-return-submit="approve">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reject Return Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="rejectForm">
+                        <div class="mb-3">
+                            <label for="rejectionReason" class="form-label">Rejection Reason *</label>
+                            <textarea class="form-control" id="rejectionReason" rows="3" required minlength="10" placeholder="Explain why this return request is being rejected..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rejectAdminNotes" class="form-label">Admin Notes</label>
+                            <textarea class="form-control" id="rejectAdminNotes" rows="2" placeholder="Additional notes for the student..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-return-submit="reject">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Return Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Return</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="confirmForm">
+                        <div class="mb-3">
+                            <label for="receivedCondition" class="form-label">Received Condition *</label>
+                            <select class="form-select" id="receivedCondition" required>
+                                <option value="">Select Condition</option>
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                                <option value="damaged">Damaged</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="Notes about the received items..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-return-submit="confirm">Confirm Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/admin-nav.js?v=NAV1B4D2"></script>
+    <script src="/js/admin.js?v=NAV1B4D2"></script>
+    <script src="/js/admin-filters.js"></script>
+    <script src="/js/admin-returns.js"></script>
+</body>
+</html>

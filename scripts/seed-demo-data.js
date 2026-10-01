@@ -1,0 +1,213 @@
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+const User = require('../models/User');
+const Registration = require('../models/Registration');
+const Schedule = require('../models/Schedule');
+
+dotenv.config();
+
+const DEMO_PASSWORD = String(process.env.DEMO_USER_PASSWORD || 'DemoPassword123!').trim();
+
+const demoUsers = [
+  {
+    name: 'SANTOYO, LANCE YUAN',
+    birthday: '2005-05-05',
+    studentNumber: '012324042326',
+    email: 'djanninetaruc@gmail.com',
+    password: DEMO_PASSWORD,
+    status: 'pending',
+    course: 'BS Information Technology',
+    registration: {
+      fullname: 'SANTOYO, LANCE YUAN',
+      yearLevel: '1st Year',
+      studentType: 'regular',
+      pictureOfId: 'https://example.com/demo-id/lance-yuan',
+      module: 'Complete School Supplies Package',
+      uniformType: 'AU PHINMA Shirt',
+      books: 'College Learning Materials',
+      course: 'BS Information Technology'
+    }
+  },
+  {
+    name: 'CRUZ, MARIA ISABEL',
+    birthday: '2004-09-12',
+    studentNumber: '012324042327',
+    email: 'maria.isabel.cruz@example.com',
+    password: DEMO_PASSWORD,
+    status: 'approved',
+    course: 'BS Information Technology',
+    registration: {
+      fullname: 'CRUZ, MARIA ISABEL',
+      yearLevel: '2nd Year',
+      studentType: 'regular',
+      pictureOfId: 'https://example.com/demo-id/maria-isabel',
+      module: 'Basic Learning Kit',
+      uniformType: 'Corporate Attire',
+      books: 'College Learning Materials, Answer Sheets',
+      course: 'BS Information Technology',
+      pickupDate: daysFromNow(2, 9)
+    },
+    schedules: [
+      {
+        title: 'Pickup Schedule',
+        type: 'Reminder',
+        description: 'Claim your approved school supplies package from the campus release area.',
+        startTime: daysFromNow(2, 9),
+        endTime: daysFromNow(2, 10),
+        location: 'Main Campus Distribution Hub',
+        module: 'Basic Learning Kit',
+        priority: 'High',
+        color: '#16a34a',
+        status: 'Planned',
+        source: 'demo_seed'
+      },
+      {
+        title: 'Orientation Review',
+        type: 'Study',
+        description: 'Review approved registration details and pickup requirements.',
+        startTime: daysFromNow(1, 14),
+        endTime: daysFromNow(1, 15),
+        location: 'Library',
+        module: 'Registration',
+        priority: 'Medium',
+        color: '#2563eb',
+        status: 'Planned',
+        source: 'demo_seed'
+      }
+    ]
+  },
+  {
+    name: 'DELA ROSA, JOHN PAOLO',
+    birthday: '2003-02-21',
+    studentNumber: '012324042328',
+    email: 'john.paolo.delarosa@example.com',
+    password: DEMO_PASSWORD,
+    status: 'rejected',
+    course: 'BS Computer Science',
+    registration: {
+      fullname: 'DELA ROSA, JOHN PAOLO',
+      yearLevel: '3rd Year',
+      studentType: 'irregular',
+      pictureOfId: 'https://example.com/demo-id/john-paolo',
+      module: 'STEM Support Materials',
+      uniformType: 'AU PHINMA Shirt',
+      books: 'Answer Sheets',
+      course: 'BS Computer Science'
+    }
+  }
+];
+
+function daysFromNow(dayOffset, hour) {
+  const value = new Date();
+  value.setDate(value.getDate() + dayOffset);
+  value.setHours(hour, 0, 0, 0);
+  return value;
+}
+
+async function upsertDemoUser(seed) {
+  let user = await User.findOne({
+    $or: [{ email: seed.email }, { studentNumber: seed.studentNumber }]
+  });
+
+  if (!user) {
+    user = new User();
+  }
+
+  user.name = seed.name;
+  user.birthday = new Date(seed.birthday);
+  user.studentNumber = seed.studentNumber;
+  user.email = seed.email;
+  user.password = seed.password;
+  user.fullname = seed.registration.fullname;
+  user.pictureOfId = seed.registration.pictureOfId;
+  user.module = seed.registration.module;
+  user.uniformType = seed.registration.uniformType;
+  user.books = seed.registration.books;
+  user.course = seed.course;
+  user.status = seed.status;
+
+  await user.save();
+  return user;
+}
+
+async function upsertRegistration(user, seed) {
+  const payload = {
+    userId: user._id,
+    fullname: seed.registration.fullname,
+    age: user.age,
+    yearLevel: seed.registration.yearLevel,
+    studentType: seed.registration.studentType,
+    pictureOfId: seed.registration.pictureOfId,
+    module: seed.registration.module,
+    uniformType: seed.registration.uniformType,
+    books: seed.registration.books,
+    course: seed.registration.course,
+    pickupDate: seed.registration.pickupDate || null
+  };
+
+  await Registration.findOneAndUpdate(
+    { userId: user._id },
+    { $set: payload },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+}
+
+async function replaceSchedules(user, seed) {
+  await Schedule.deleteMany({ userId: user._id, source: 'demo_seed' });
+
+  if (!Array.isArray(seed.schedules) || seed.schedules.length === 0) {
+    return 0;
+  }
+
+  await Schedule.insertMany(seed.schedules.map(item => ({
+    ...item,
+    userId: user._id,
+    isAutoGenerated: false,
+    reminders: Array.isArray(item.reminders) ? item.reminders : [15]
+  })));
+
+  return seed.schedules.length;
+}
+
+async function main() {
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be set before running the demo seeder.');
+  }
+
+  await mongoose.connect(process.env.MONGO_URI);
+
+  const summary = {
+    users: 0,
+    registrations: 0,
+    schedules: 0
+  };
+
+  for (const seed of demoUsers) {
+    const user = await upsertDemoUser(seed);
+    summary.users += 1;
+
+    await upsertRegistration(user, seed);
+    summary.registrations += 1;
+
+    summary.schedules += await replaceSchedules(user, seed);
+  }
+
+  console.log(JSON.stringify({
+    message: 'Demo seed completed successfully.',
+    loginPassword: DEMO_PASSWORD,
+    ...summary
+  }));
+
+  await mongoose.disconnect();
+}
+
+main().catch(async error => {
+  console.error(error);
+  try {
+    await mongoose.disconnect();
+  } catch (_) {
+    // ignore disconnect failures during script errors
+  }
+  process.exit(1);
+});

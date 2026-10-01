@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="landing-page login-page register-page relative min-h-screen bg-cover bg-center bg-no-repeat">
+  <div class="login-page__overlay fixed inset-0" aria-hidden="true"></div>
+  <main class="auth-layout relative z-10">
+    <section class="brand-panel" aria-labelledby="registerWelcomeTitle">
+      <div class="brand-orb" aria-hidden="true"></div>
+      <div class="brand-content">
+        <p class="brand-kicker">Phinma Araullo South Campus</p>
+        <h1 id="registerWelcomeTitle" class="brand-title">Join the<br>Smart Serve Portal</h1>
+        <p class="brand-copy">Create your account and access essential student services in one secure place.</p>
+        <ul class="brand-points">
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 3.75h7l3 3V20.25H7V3.75Z"/><path d="M14 3.75v3h3M9.5 11h5M9.5 14h5M9.5 17h3.5"/></svg>
+            </span>
+            <span>Manage your needs for<br>Business Center</span>
+          </li>
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="m13.25 2.75-7 10h5l-.5 8.5 7-11h-5.25l.75-7.5Z"/></svg>
+            </span>
+            <span>Fast and Reliable<br>transactions</span>
+          </li>
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.25c2.3 1.7 4.57 2.35 7 2.5v5.5c0 4.1-2.8 7.63-7 9.5-4.2-1.87-7-5.4-7-9.5v-5.5c2.43-.15 4.7-.8 7-2.5Z"/><path d="m9 12.1 2 2 4-4.2"/></svg>
+            </span>
+            <span>Designed for fast<br>and reliable access</span>
+          </li>
+        </ul>
+      </div>
+      <div class="brand-building" aria-hidden="true"></div>
+    </section>
+
+    <div class="auth-container">
+      <section id="registerSection" class="auth-section">
+        <h1>Create Account</h1>
+        <p class="login-subtitle">Enter your student information to get started</p>
+        <form id="registerForm" autocomplete="on">
+          <fieldset class="registration-group">
+            <legend>Personal information</legend>
+            <div class="register-name-row">
+              <input type="text" id="firstName" name="firstName" placeholder="First Name" aria-label="First name" autocomplete="given-name" required>
+              <input type="text" id="middleName" name="middleName" placeholder="Middle Name" aria-label="Middle name" autocomplete="additional-name">
+              <input type="text" id="lastName" name="lastName" placeholder="Last Name" aria-label="Last name" autocomplete="family-name" required>
+            </div>
+            <div class="birthday-row" aria-label="Birthday">
+              <select id="birthMonth" name="birthMonth" aria-label="Birth month" autocomplete="bday-month" required>
+                <option value="">Month</option>
+              </select>
+              <select id="birthDay" name="birthDay" aria-label="Birth day" autocomplete="bday-day" required>
+                <option value="">Day</option>
+              </select>
+              <select id="birthYear" name="birthYear" aria-label="Birth year" autocomplete="bday-year" required>
+                <option value="">Year</option>
+              </select>
+            </div>
+            <p id="agePreview" class="age-preview">Age: -</p>
+          </fieldset>
+          <fieldset class="registration-group">
+            <legend>Account information</legend>
+            <input type="text" id="studentNumber" name="studentNumber" placeholder="Student Number (starts with 01)" aria-label="Student number" inputmode="numeric" maxlength="12" autocomplete="off" required>
+            <input type="email" id="email" name="email" placeholder="School Email (must be @phinmaed.com)" aria-label="School email" autocomplete="username email" required>
+            <div class="register-password-row">
+              <input type="password" id="password" name="password" placeholder="Password" aria-label="Password" autocomplete="new-password" required>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" aria-label="Confirm password" autocomplete="new-password" required>
+            </div>
+          </fieldset>
+          <button type="button" id="sendCodeBtn" class="register-primary-button">Request OTP <span aria-hidden="true">&#8594;</span></button>
+        </form>
+        <div id="registerMessage" class="auth-message hidden" aria-live="polite"></div>
+        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+        <p class="register-prompt">Already have an account? <a href="/">Login</a></p>
+      </section>
+
+      <section id="otpSection" class="auth-section hidden">
+        <div class="verification-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3.75 6.75h16.5v10.5H3.75V6.75Z"/><path d="m4.5 7.5 7.5 6 7.5-6"/></svg>
+        </div>
+        <h1>Verify Email</h1>
+        <p id="otpEmailLabel">Enter the 6-digit code sent to your email:</p>
+        <input type="text" id="captchaAnswer" name="verificationCode" placeholder="Enter OTP" aria-label="Verification code" autocomplete="one-time-code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
+        <button type="button" id="verifyCodeBtn" class="register-primary-button">Verify &amp; Register</button>
+        <button type="button" id="resendCodeBtn" class="register-secondary-button">Resend OTP</button>
+        <p class="register-prompt"><a href="#" id="backToRegisterLink">&#8592; Back to register form</a></p>
+        <div id="otpMessage" class="auth-message hidden" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+  <script src="js/register.js"></script>
+  <script src="js/show-password.js"></script>
+</body>
+</html>

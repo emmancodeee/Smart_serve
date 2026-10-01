@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="landing-page login-page relative min-h-screen bg-cover bg-center bg-no-repeat">
+  <div class="login-page__overlay fixed inset-0" aria-hidden="true"></div>
+  <div class="auth-layout relative z-10">
+    <section class="brand-panel" aria-labelledby="welcomeTitle">
+      <div class="brand-orb" aria-hidden="true"></div>
+      <div class="brand-content">
+        <p class="brand-kicker">Phinma Araullo South Campus</p>
+        <h1 id="welcomeTitle" class="brand-title">Welcome to<br>Smart Serve Portal</h1>
+        <p class="brand-copy">Access essential student needs for Business Center</p>
+        <ul class="brand-points">
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 3.75h7l3 3V20.25H7V3.75Z"/><path d="M14 3.75v3h3M9.5 11h5M9.5 14h5M9.5 17h3.5"/></svg>
+            </span>
+            <span>Manage your needs for<br>Business Center</span>
+          </li>
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="m13.25 2.75-7 10h5l-.5 8.5 7-11h-5.25l.75-7.5Z"/></svg>
+            </span>
+            <span>Fast and Reliable<br>transactions</span>
+          </li>
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.25c2.3 1.7 4.57 2.35 7 2.5v5.5c0 4.1-2.8 7.63-7 9.5-4.2-1.87-7-5.4-7-9.5v-5.5c2.43-.15 4.7-.8 7-2.5Z"/><path d="m9 12.1 2 2 4-4.2"/></svg>
+            </span>
+            <span>Designed for fast<br>and reliable access</span>
+          </li>
+        </ul>
+      </div>
+      <div class="brand-building" aria-hidden="true"></div>
+    </section>
+
+    <div class="auth-container">
+      <section id="loginSection" class="auth-section">
+        <h1>Login</h1>
+        <p class="login-subtitle">Sign in to your account to continue</p>
+        <form id="loginForm" autocomplete="on">
+          <div class="field-control">
+            <label class="field-label" for="email">Email</label>
+            <span class="field-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3.75 6.75h16.5v10.5H3.75V6.75Z"/><path d="m4.5 7.5 7.5 6 7.5-6"/></svg>
+            </span>
+            <input type="email" id="email" placeholder="Email" autocomplete="email" required>
+          </div>
+          <div class="field-control">
+            <label class="field-label" for="password">Password</label>
+            <span class="field-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10M12 14v2.5"/></svg>
+            </span>
+            <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" class="login-button"><span>Login</span><span class="login-arrow" aria-hidden="true">&#8594;</span></button>
+        </form>
+        <p class="forgot-link-row"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
+        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+        <p class="register-prompt">Don't have an account? <a href="register.html">Register</a></p>
+      </section>
+
+      <section id="forgotSection" class="auth-section hidden">
+        <h1>Forgot Password</h1>
+        <p class="login-subtitle">Reset your password securely</p>
+        <form id="forgotPasswordForm" autocomplete="on" novalidate>
+          <p id="resetStepHint">Enter your email and we will send you a reset code.</p>
+          <input type="email" id="resetEmail" placeholder="Enter your email" autocomplete="email" required>
+          <button type="button" id="sendResetCodeBtn" class="inline-flex w-full items-center justify-center rounded-xl bg-amber-400 px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-1">Send Reset Code</button>
+
+          <div id="resetStepFields" class="hidden">
+            <p id="resetCodeSentHint">A reset code was sent to <strong id="resetCodeEmailLabel"></strong>. Enter it below to set your new password.</p>
+            <input type="text" id="resetCode" placeholder="Reset code" autocomplete="one-time-code">
+            <input type="password" id="newPassword" placeholder="New password" autocomplete="new-password">
+            <input type="password" id="confirmNewPassword" placeholder="Confirm new password" autocomplete="new-password">
+            <button type="button" id="resetPasswordBtn" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1">Reset Password</button>
+            <p><a href="#" id="resendCodeLink">Resend code</a></p>
+          </div>
+        </form>
+        <p><a href="#" id="backToLoginLink">Back to login</a></p>
+      </section>
+
+      <div id="message"></div>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+  <script src="js/show-password.js"></script>
+</body>
+</html>

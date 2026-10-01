@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .student-shell {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eef4fb 100%);
+    }
+
+    .student-sidebar {
+      width: 100%;
+      background: linear-gradient(180deg, #17357f 0%, #2447a8 54%, #315fda 100%);
+    }
+
+    .student-main {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .student-header-inner,
+    .student-main-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .student-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #152c69;
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(21, 44, 105, 0.24);
+    }
+
+    .student-welcome {
+      color: #ffffff;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .student-status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.35rem;
+      border: 1px solid #86efac;
+      border-radius: 999px;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.12);
+    }
+
+    .student-clock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 305px;
+      padding: 0.85rem 1.35rem;
+      border: 1px solid rgba(253, 224, 71, 0.85);
+      border-radius: 1.25rem;
+      background: #1d3b86;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .student-logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 126px;
+      padding: 0.85rem 1.65rem;
+      border: 1px solid #fde047;
+      border-radius: 999px;
+      background: #ffda47;
+      color: #183575;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: 0 10px 18px rgba(250, 204, 21, 0.18);
+    }
+
+    .student-logout:hover {
+      background: #ffe069;
+    }
+
+    .student-panel {
+      width: 100%;
+      border: 1px solid #d9e6fb;
+      border-radius: 28px;
+      background: #ffffff;
+      box-shadow: 0 16px 42px rgba(30, 58, 138, 0.12);
+    }
+
+    .student-panel h2 {
+      margin-top: 0;
+    }
+
+    .student-panel-heading {
+      margin-bottom: 1rem;
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: #16325f;
+    }
+
+    .student-info-pill {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 1px solid #dfe7f3;
+      border-radius: 18px;
+      background: #f8fbff;
+      padding: 0.95rem 1rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .student-info-pill strong {
+      flex-shrink: 0;
+    }
+
+    .student-info-pill span {
+      min-width: 0;
+      flex: 1;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .user-info-error {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border: 1px solid #fca5a5;
+      border-radius: 0.75rem;
+      background: #fef2f2;
+      color: #991b1b;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .user-info-error.hidden {
+      display: none;
+    }
+
+    .user-info-error-retry {
+      flex-shrink: 0;
+      border: 1px solid #fca5a5;
+      border-radius: 0.5rem;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .user-info-error-retry:hover {
+      background: #fecaca;
+      color: #7f1d1d;
+    }
+
+    @media (min-width: 1024px) {
+      .student-shell {
+        display: flex;
+      }
+
+      .student-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 270px;
+        overflow-y: auto;
+      }
+
+      .student-main {
+        margin-left: 270px;
+        width: calc(100% - 270px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .student-welcome {
+        font-size: 1.3rem;
+      }
+
+      .student-clock {
+        min-width: 0;
+        width: 100%;
+      }
+    }
+
+      .student-page-title {
+        color: rgba(219, 234, 254, 0.85);
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.1;
+      }
+
+      .student-search {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+        border-radius: 12px;
+        background: #1d3b86;
+        color: rgba(219, 234, 254, 0.8);
+      }
+
+      .student-search:focus-within {
+        border-color: #fde047;
+        box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.18);
+      }
+
+      .student-search .search-input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 0.85rem;
+        color: #ffffff;
+        width: 120px;
+      }
+
+      .student-search .search-input::placeholder {
+        color: rgba(219, 234, 254, 0.55);
+      }
+
+      .student-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .student-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ffda47;
+        color: #183575;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .student-profile-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .student-profile-name {
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .student-profile-role {
+        color: rgba(219, 234, 254, 0.75);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .student-bell {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #ffffff;
+        background: #1d3b86;
+        border: 1px solid rgba(253, 224, 71, 0.45);
+      }
+
+      .student-bell svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .student-bell-dot {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ffda47;
+        border: 2px solid #152c69;
+      }
+
+      @media (max-width: 640px) {
+        .student-page-title {
+          font-size: 0.85rem;
+        }
+
+        .student-profile-info {
+          display: none;
+        }
+
+        .student-search .search-input {
+          width: 90px;
+        }
+      }
+  </style>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="/css/app-shell.css">
+  <script src="/js/app-shell.js"></script>
+  <script src="/js/ui-kit.js"></script>
+  <script src="/js/student-nav.js"></script>
+</head>
+<body class="theme-light min-h-screen bg-[#eef5ff] text-slate-900 [font-family:'IBM_Plex_Sans',sans-serif]">
+  <div id="sidebarOverlay" class="app-sidebar-overlay" aria-hidden="true"></div>
+  <div class="student-shell min-h-screen">
+    <aside id="sidebar" class="student-sidebar app-sidebar w-full border-r border-white/20 text-white">
+      <div class="app-brand flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+        <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+          <svg class="h-6 w-6 text-yellow-300" width="24" height="24" style="width:24px;height:24px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+            <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+            <path d="M19 10v5"></path>
+          </svg>
+        </span>
+        <h2 id="sidebarSectionTitle" class="app-brand-name text-[1.9rem] font-bold tracking-[0.025em] leading-[1.16]">Smart Serve</h2>
+      </div>
+      <ul class="app-nav-list grid grid-cols-1 gap-2 p-6" data-student-nav></ul>
+    </aside>
+
+    <div class="student-main app-main w-full min-w-0">
+      <header class="student-topbar">
+        <div class="student-header-inner flex flex-wrap items-center justify-between gap-3 px-5 py-3 md:px-7">
+          <div class="header-left flex flex-wrap items-center gap-4">
+            <button type="button" class="app-sidebar-toggle" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 id="profileHeaderTitle" class="student-welcome">Welcome</h1>
+            </div>
+            <span id="headerClock" class="student-clock hidden rounded-2xl border border-yellow-300/80 bg-[#1d3b86] px-4 py-2 text-[0.86rem] font-semibold text-white md:inline-flex"></span>
+            <span id="profileStatusBadge" class="student-status-pill">Status: -</span>
+          </div>
+          <div class="header-right flex flex-wrap items-center justify-end gap-3 sm:flex sm:items-center sm:gap-4">
+            <div class="app-notifications" data-notifications>
+              <button type="button" class="student-bell header-bell" data-notifications-trigger aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="student-bell-dot" data-notifications-badge hidden></span>
+              </button>
+              <div class="app-notifications-panel" data-notifications-panel hidden></div>
+            </div>
+            <div class="app-profile-menu" data-profile-menu>
+              <button type="button" class="student-profile app-profile-trigger" data-profile-trigger aria-haspopup="menu" aria-expanded="false">
+                <span class="student-avatar" id="studentAvatar">S</span>
+                <span class="student-profile-info">
+                  <span class="student-profile-name" id="studentProfileName">Student</span>
+                  <span class="student-profile-role">Student</span>
+                </span>
+                <svg class="app-profile-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="app-profile-dropdown" data-profile-dropdown role="menu" hidden>
+                <a class="app-menu-item" role="menuitem" href="/profile">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                  My Profile
+                </a>
+                <button id="logoutBtn" type="button" class="app-menu-item" role="menuitem">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="student-main-inner px-4 pb-8 pt-5 md:px-7">
+        <div class="module-title-bar mb-6">User Profile</div>
+        <section class="student-panel mb-6 p-6">
+          <h2 class="student-panel-heading">Your Student Details</h2>
+          <div class="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2">
+            <p class="student-info-pill"><strong>Student Name:</strong> <span id="infoStudentName">N/A</span></p>
+            <p class="student-info-pill"><strong>Student ID:</strong> <span id="infoStudentNumber">N/A</span></p>
+            <p class="student-info-pill"><strong>Email:</strong> <span id="infoStudentEmail">N/A</span></p>
+            <p class="student-info-pill"><strong>Program/Course:</strong> <span id="infoProgramCourse">N/A</span></p>
+            <p class="student-info-pill"><strong>Year Level:</strong> <span id="infoYearLevel">N/A</span></p>
+            <p class="student-info-pill"><strong>Contact Number:</strong> <span id="infoContactNumber">N/A</span></p>
+            <p class="student-info-pill"><strong>Registration Status:</strong> <span id="infoRegistrationStatus">N/A</span></p>
+          </div>
+        </section>
+
+        <section class="student-panel mb-6 p-6">
+          <h2 class="student-panel-heading">Registration Details</h2>
+          <div class="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2">
+            <p class="student-info-pill"><strong>Status:</strong> <span id="infoStatus">N/A</span></p>
+            <p class="student-info-pill"><strong>Course:</strong> <span id="infoCourse">N/A</span></p>
+            <p class="student-info-pill"><strong>Module:</strong> <span id="infoModule">N/A</span></p>
+            <p class="student-info-pill"><strong>Uniform Type:</strong> <span id="infoUniformType">N/A</span></p>
+            <p class="student-info-pill"><strong>Books:</strong> <span id="infoBooks">N/A</span></p>
+            <p class="student-info-pill"><strong>Pickup Day:</strong> <span id="infoPickupDay">Not set</span></p>
+          </div>
+        </section>
+
+        <section id="edit-profile" class="student-panel p-6">
+          <h2 class="student-panel-heading">Edit Your Profile</h2>
+          <div id="profileUserInfoError" class="user-info-error hidden" role="alert" style="margin-bottom: 1rem;">
+            <span id="profileUserInfoErrorText"></span>
+            <button id="profileUserInfoErrorRetry" class="user-info-error-retry">Retry</button>
+          </div>
+          <form id="editProfileForm" class="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2" autocomplete="on">
+            <div class="grid gap-1.5">
+              <label for="editName" class="text-sm font-semibold text-[#16325f]">Full Name</label>
+              <input type="text" id="editName" placeholder="Enter your full name" autocomplete="name" required class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="grid gap-1.5">
+              <label for="editEmail" class="text-sm font-semibold text-[#16325f]">Email Address</label>
+              <input type="email" id="editEmail" placeholder="Enter your email address" autocomplete="email" required class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="grid gap-1.5">
+              <label for="oldPassword" class="text-sm font-semibold text-[#16325f]">Old Password</label>
+              <input type="password" id="oldPassword" placeholder="Enter your old password" autocomplete="off" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="grid gap-1.5">
+              <label for="newPassword" class="text-sm font-semibold text-[#16325f]">New Password</label>
+              <input type="password" id="newPassword" placeholder="Enter your new password" autocomplete="new-password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="grid gap-1.5">
+              <label for="confirmNewPassword" class="text-sm font-semibold text-[#16325f]">Confirm New Password</label>
+              <input type="password" id="confirmNewPassword" placeholder="Confirm your new password" autocomplete="new-password" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="mt-6 flex flex-wrap items-center gap-3 md:col-span-2">
+              <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-[#0b1f4d] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#132d67] hover:shadow-md active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-1">Save Changes</button>
+              <button type="button" id="cancelProfileButton" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-1">Cancel</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/student-header.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/show-password.js"></script>
+</body>
+</html>

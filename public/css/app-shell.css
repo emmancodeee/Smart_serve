@@ -1,0 +1,688 @@
+/* ============================================================
+   App shell (app-shell.js)
+   Sidebar rail that expands on hover, below-desktop drawer,
+   profile menu and notifications panel, shared by every signed-in
+   page (admin and student). Loaded last on each page. Colours are
+   the existing SmartServe palette: sidebar blues #17357f -> #315fda,
+   navy #152c69, gold #F4C542 / #fde047.
+   ============================================================ */
+
+:root {
+  --shell-rail: 76px;
+  --shell-full: 280px;
+  /* Header height including its 1px bottom border. The sidebar's logo block
+     uses the same height so its divider lines up with the header's edge. */
+  --shell-header-h: 65px;
+  --shell-ease: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --shell-navy: #152c69;
+  --shell-gold: #F4C542;
+  --shell-ink: #0F172A;
+  --shell-ink-soft: #64748B;
+  --shell-line: #E5E7EB;
+}
+
+/* --- Menu button (opens the drawer below desktop only) --- */
+
+.app-sidebar-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-sidebar-toggle:hover,
+.app-sidebar-toggle[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(253, 224, 71, 0.6);
+}
+
+.app-sidebar-toggle:focus-visible,
+.app-profile-trigger:focus-visible,
+.app-menu-item:focus-visible,
+.header-bell:focus-visible {
+  outline: 2px solid #fde047;
+  outline-offset: 2px;
+}
+
+/* Logo block as tall as the header, so the two bottom edges form one line. */
+.app-sidebar .app-brand {
+  height: var(--shell-header-h);
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* --- Desktop: icon rail that expands on hover ---
+   The rail widens over the page while the pointer (or keyboard focus) is in
+   it, so the content does not jump each time the pointer passes. `:root`
+   matches the pages' own two-class sidebar and main-column rules. */
+
+@media (min-width: 1024px) {
+  .app-sidebar-toggle {
+    display: none;
+  }
+
+  :root .app-sidebar {
+    z-index: 50;
+    width: var(--shell-rail);
+    overflow-x: hidden;
+    transition: width var(--shell-ease), box-shadow var(--shell-ease);
+  }
+
+  /* The short delay keeps the rail from opening when the pointer only
+     crosses it on the way to the page. */
+  :root .app-sidebar:hover,
+  :root .app-sidebar:has(:focus-visible) {
+    width: var(--shell-full);
+    box-shadow: 16px 0 40px rgba(15, 23, 42, 0.22);
+    transition-delay: 0.12s;
+  }
+
+  :root .app-main {
+    margin-left: var(--shell-rail);
+    width: calc(100% - var(--shell-rail));
+  }
+
+  /* Rail: 44px logo and 34px icons centred in the 76px column. */
+  :root .app-sidebar:not(:hover):not(:has(:focus-visible)) .app-brand {
+    gap: 0 !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  :root .app-sidebar:not(:hover):not(:has(:focus-visible)) .app-nav-list {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  :root .app-sidebar:not(:hover):not(:has(:focus-visible)) .app-nav-link {
+    gap: 0 !important;
+    padding: 7px !important;
+  }
+
+  :root .app-sidebar:not(:hover):not(:has(:focus-visible)) :is(.app-brand-name, .app-nav-label) {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Labels fade in once the rail has mostly widened. */
+  :root .app-sidebar:hover :is(.app-brand-name, .app-nav-label),
+  :root .app-sidebar:has(:focus-visible) :is(.app-brand-name, .app-nav-label) {
+    transition-delay: 0.2s;
+  }
+}
+
+/* Labels may shrink to nothing so the rail's links stay 48px wide; without
+   this their nowrap text set the grid column's minimum width. */
+.app-sidebar .app-brand-name,
+.app-sidebar .app-nav-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.app-sidebar .app-brand > :first-child,
+.app-sidebar .app-nav-icon {
+  flex: none;
+}
+
+/* !important: admin.css pins `grid-template-columns: 1fr` on the nav list with
+   a longer selector, and plain 1fr lets the hidden label widen the column. */
+.app-sidebar .app-nav-list {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.app-sidebar .app-nav-link {
+  min-width: 0;
+}
+
+/* --- Profile menu --- */
+
+.app-profile-menu {
+  position: relative;
+  flex: none;
+}
+
+.app-profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-profile-trigger:hover,
+.app-profile-trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.app-profile-caret {
+  flex: none;
+  opacity: 0.75;
+  transition: transform 0.2s ease;
+}
+
+.app-profile-trigger[aria-expanded="true"] .app-profile-caret {
+  transform: rotate(180deg);
+}
+
+.app-profile-dropdown,
+.app-notifications-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  border: 1px solid var(--shell-line);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--shell-ink);
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.18);
+}
+
+.app-profile-dropdown {
+  min-width: 200px;
+  padding: 6px;
+}
+
+/* #logoutBtn carries older ID-level button styles on some pages. */
+.app-profile-dropdown .app-menu-item,
+.app-profile-dropdown #logoutBtn.app-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--shell-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transform: none;
+}
+
+.app-profile-dropdown .app-menu-item:hover,
+.app-profile-dropdown #logoutBtn.app-menu-item:hover {
+  background: #f1f5f9;
+  transform: none;
+}
+
+.app-profile-dropdown .app-menu-item svg {
+  flex: none;
+  color: var(--shell-ink-soft);
+}
+
+.app-profile-dropdown .app-menu-item:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* --- Notifications --- */
+
+.app-notifications {
+  position: relative;
+  flex: none;
+}
+
+.app-notifications .header-bell {
+  padding: 0;
+  font: inherit;
+}
+
+.app-notifications-panel {
+  width: min(360px, calc(100vw - 24px));
+  overflow: hidden;
+}
+
+.app-notifications-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #edf2f8;
+  color: var(--shell-navy);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.app-notifications-list {
+  max-height: 360px;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.app-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--shell-ink);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+a.app-notification:hover,
+a.app-notification:focus-visible {
+  background: #f1f5f9;
+  outline: none;
+}
+
+.app-notification-count {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.app-notification-count.is-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.app-notification-count.is-info {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.app-notification-text {
+  min-width: 0;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.app-notification-title {
+  display: block;
+  font-weight: 600;
+}
+
+.app-notification-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--shell-ink-soft);
+  font-size: 0.78rem;
+}
+
+.app-notifications-empty {
+  padding: 28px 16px;
+  color: var(--shell-ink-soft);
+  font-size: 0.86rem;
+  text-align: center;
+}
+
+/* The badge is shown only when there is something new (app-shell.js); older
+   page styles gave the dot display: block unconditionally. */
+[data-notifications-badge][hidden] {
+  display: none !important;
+}
+
+/* --- Below desktop: off-canvas drawer ---
+   `html body` outranks the pages' own .dashboard-sidebar / .student-sidebar
+   rules, which left the sidebar as a static block above the page. The admin
+   pages carry equivalent rules in admin.css. */
+
+#sidebarOverlay.app-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+@media (max-width: 1023px) {
+  html body .app-sidebar {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    z-index: 60;
+    width: var(--shell-full);
+    max-width: 85vw;
+    height: 100%;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  html body .app-sidebar.is-open {
+    transform: none;
+    box-shadow: 24px 0 48px rgba(15, 23, 42, 0.28);
+  }
+
+  html body .app-main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  #sidebarOverlay.app-sidebar-overlay.is-visible {
+    display: block;
+  }
+}
+
+@media (max-width: 639px) {
+  .app-profile-trigger .profile-info,
+  .app-profile-caret {
+    display: none;
+  }
+
+  .app-profile-trigger {
+    padding: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .app-sidebar,
+  .app-main,
+  .app-sidebar .app-brand-name,
+  .app-sidebar .app-nav-label {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   UI kit (ui-kit.js): toasts, dialogs, busy buttons
+   ============================================================ */
+
+.ui-toast-region {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.ui-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px 12px 14px;
+  border: 1px solid var(--shell-line);
+  border-left-width: 4px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--shell-ink);
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.45;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+  pointer-events: auto;
+  animation: ui-toast-in 0.18s ease-out;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ui-toast.is-leaving {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+.ui-toast--success { border-left-color: #16a34a; }
+.ui-toast--error { border-left-color: #dc2626; }
+.ui-toast--warning { border-left-color: #f59e0b; }
+.ui-toast--info { border-left-color: #2563eb; }
+
+.ui-toast-message {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ui-toast-close {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: -2px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--shell-ink-soft);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ui-toast-close:hover {
+  background: #f1f5f9;
+  color: var(--shell-ink);
+}
+
+@keyframes ui-toast-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.ui-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.ui-dialog {
+  width: min(440px, 100%);
+  padding: 22px 24px 20px;
+  border: 1px solid var(--shell-line);
+  border-radius: 20px;
+  background: #ffffff;
+  color: var(--shell-ink);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.24);
+}
+
+.ui-dialog-title {
+  margin: 0 0 8px;
+  color: var(--shell-navy);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.ui-dialog-message {
+  margin: 0 0 16px;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.ui-dialog-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--shell-navy);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ui-dialog-field {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--shell-ink);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ui-dialog-field:focus {
+  border-color: #2747A6;
+  box-shadow: 0 0 0 3px rgba(39, 71, 166, 0.14);
+}
+
+.ui-dialog-error {
+  margin: 6px 0 0;
+  color: #b91c1c;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.ui-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.ui-btn:focus-visible {
+  outline: 2px solid #2747A6;
+  outline-offset: 2px;
+}
+
+.ui-btn--ghost {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+.ui-btn--ghost:hover { background: #f8fafc; }
+.ui-btn--primary { background: #2747A6; color: #ffffff; }
+.ui-btn--primary:hover { background: #1e3a8a; }
+.ui-btn--danger { background: #dc2626; color: #ffffff; }
+.ui-btn--danger:hover { background: #b91c1c; }
+
+/* Busy buttons (UIKit.withBusy): dimmed with an inline spinner. */
+button.is-busy,
+.is-busy {
+  position: relative;
+  cursor: progress !important;
+  opacity: 0.75;
+}
+
+button.is-busy::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: ui-spin 0.7s linear infinite;
+}
+
+@keyframes ui-spin {
+  to { transform: rotate(360deg); }
+}
+
+.app-notification.is-unread .app-notification-title {
+  color: var(--shell-navy);
+  font-weight: 700;
+}
+
+.app-notification.is-unread {
+  background: #f8fafc;
+}
+
+/* ============================================================
+   Table loading and empty states, shared by admin and student
+   tables (admin.js showLoading/showEmpty and the page scripts'
+   placeholder rows). Moved here from admin.css so student pages
+   get the same states.
+   ============================================================ */
+
+/* Loading rows (static placeholders and showLoading()): a spinner above the
+   message, laid out like the empty state below. */
+td.table-loading-state {
+  padding: 48px 16px !important;
+  color: var(--shell-ink-soft) !important;
+  font-weight: 500;
+  text-align: center;
+}
+
+td.table-loading-state::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 12px;
+  border: 3px solid #dbeafe;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: ui-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  td.table-loading-state::before {
+    animation-duration: 2.4s;
+  }
+}
+
+/* Empty tables: an icon tile above the message, matching the dashboard's
+   empty chart state (.chart-empty-icon). */
+td.table-empty-state {
+  padding: 48px 16px !important;
+  color: var(--shell-ink-soft) !important;
+  font-weight: 500;
+  text-align: center;
+}
+
+td.table-empty-state::before {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  background: #eff6ff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E%3C/svg%3E") center / 22px no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.14);
+}
+

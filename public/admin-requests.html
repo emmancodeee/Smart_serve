@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniform Request Management | Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css?v=NAV1B4D2">
+  <style>
+    .request-table { width: 100%; border-collapse: collapse; }
+    .request-table th, .request-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+    .request-table th { background: #f5f5f5; font-weight: 600; }
+    .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-approved { background: #d4edda; color: #155724; }
+    .status-rejected { background: #f8d7da; color: #721c24; }
+    .filter-container { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-container select, .filter-container input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
+    .btn-action { padding: 6px 12px; margin: 0 4px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .btn-approve { background: #28a745; color: white; }
+    .btn-approve:hover { background: #218838; }
+    .btn-reject { background: #dc3545; color: white; }
+    .btn-reject:hover { background: #c82333; }
+    .btn-bulk { background: #007bff; color: white; padding: 10px 20px; }
+    .btn-bulk:hover { background: #0056b3; }
+    .checkbox-col { text-align: center; }
+    .search-box { flex: 1; min-width: 200px; }
+    .loading { text-align: center; padding: 20px; color: #666; }
+    .no-data { text-align: center; padding: 40px; color: #999; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+    .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .modal-header { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; }
+    .modal-body { margin-bottom: 20px; }
+    .modal-body textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; }
+    .pickup-number { font-family: monospace; font-weight: 700; color: #007bff; }
+  </style>
+</head>
+<body class="admin-requests-page bg-[#F8FAFC] text-slate-900" style="font-family: 'IBM Plex Sans', sans-serif;">
+  <div class="min-h-screen lg:flex">
+    <aside class="sidebar-shell w-full border-r border-white/20 bg-gradient-to-b from-[#17357f] via-[#2447a8] to-[#315fda] text-white shadow-[12px_0_32px_rgba(23,53,127,0.18)] lg:fixed lg:inset-y-0 lg:w-[280px] lg:overflow-y-auto">
+      <div class="flex items-center gap-4 border-b border-yellow-300/50 px-6 py-6">
+        <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/10 shadow-inner">
+          <svg class="h-6 w-6 text-yellow-300" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5Z"></path>
+            <path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5"></path>
+            <path d="M19 10v5"></path>
+          </svg>
+        </span>
+        <h2 class="text-[1.9rem] font-bold tracking-[0.025em] text-white">Smart Serve</h2>
+      </div>
+    <ul class="grid grid-cols-1 gap-2 p-6" data-admin-nav></ul>
+    </aside>
+
+    <div class="main-content-shell w-full min-w-0 lg:ml-[280px]">
+      <header class="admin-header-white">
+        <div class="header-left">
+          <div class="header-subtitle">Review, approve, or reject uniform requests from students.</div>
+        </div>
+        <div class="header-right">
+          <div class="header-search">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search..." class="search-input">
+          </div>
+          <div class="header-bell">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="bell-badge"></span>
+          </div>
+          <div class="clock-card">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="headerClock"></span>
+          </div>
+          <div class="admin-profile">
+            <div class="profile-avatar" id="profileAvatar">A</div>
+            <div class="profile-info">
+              <div class="profile-name" id="profileName">Admin</div>
+              <div class="profile-role">Administrator</div>
+            </div>
+          </div>
+          <button id="logoutBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <main class="mx-auto max-w-[1280px]">
+        <div class="module-title-bar mt-5 mb-5">Uniform Request Management</div>
+        <!-- Filters -->
+        <div class="filter-container">
+          <select id="statusFilter" class="search-box">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <input type="text" id="moduleFilter" placeholder="Filter by Module Code" class="search-box">
+          <input type="text" id="searchFilter" placeholder="Search by Name or Student #" class="search-box">
+          <button onclick="applyFilters()" class="btn-bulk">Search</button>
+          <button onclick="resetFilters()" class="btn-bulk" style="background: #6c757d;">Reset</button>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this.checked)">
+            <span>Select All</span>
+          </label>
+          <button id="bulkApproveBtn" onclick="bulkApprove()" class="btn-bulk" style="background: #28a745;" disabled>Approve Selected</button>
+          <button id="approveAllBtn" onclick="approveAllVisible()" class="btn-bulk" style="background: #1e88e5;">Approve All Visible</button>
+          <label style="display:flex;align-items:center;gap:6px;margin-left:8px;color:#666;font-size:0.95rem;">
+            <input type="checkbox" id="fcfsToggle" checked onchange="toggleFcfs(this.checked)"> First-come first-serve
+          </label>
+          <span id="selectionCount" style="color: #666; font-size: 0.9rem;"></span>
+        </div>
+
+        <!-- Charts & AI Insights -->
+        <div style="display:flex;gap:18px;margin-bottom:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:300px;background:white;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+            <h3 style="margin:0 0 8px 0;font-weight:700;">Uniforms Summary</h3>
+            <canvas id="uniformChart" height="160"></canvas>
+          </div>
+
+          <div style="flex:1;min-width:300px;background:white;padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+            <h3 style="margin:0 0 8px 0;font-weight:700;">AI Insights</h3>
+            <div id="aiInsights" style="color:#333;font-size:0.95rem;line-height:1.4;"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
+              <button onclick="generateInsights()" class="btn-action" style="background:#17a2b8;color:white;">Generate Insights</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requests Table -->
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div id="loadingIndicator" class="loading" style="display: none;">Loading requests...</div>
+          
+          <table class="request-table" id="requestsTable" style="display: none; width: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 30px;"><input type="checkbox" id="selectAllHeader" onchange="toggleSelectAll(this.checked)"></th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Module / Code</th>
+                <th>Uniform Type</th>
+                <th>Status</th>
+                <th>Pickup #</th>
+                <th>Approval Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div id="noDataMessage" class="no-data" style="display: none;">No requests found</div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Rejection Modal -->
+  <div id="rejectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Reject Request</div>
+      <div class="modal-body">
+        <p style="margin-bottom: 15px;">Please provide a reason for rejection:</p>
+        <textarea id="rejectionReason" placeholder="Enter rejection reason..." rows="4" style="width: 100%;"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeRejectModal()" class="btn-action" style="background: #6c757d; color: white;">Cancel</button>
+        <button onclick="confirmReject()" class="btn-action btn-reject">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Add Feedback</div>
+      <div class="modal-body">
+        <p style="margin-bottom: 15px;">Add feedback for this request:</p>
+        <textarea id="feedbackText" placeholder="Enter feedback..." rows="4" style="width: 100%;"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeFeedbackModal()" class="btn-action" style="background: #6c757d; color: white;">Cancel</button>
+        <button onclick="confirmFeedback()" class="btn-action" style="background: #007bff; color: white;">Save Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/admin-nav.js?v=NAV1B4D2"></script>
+  <script src="/js/admin-filters.js"></script>
+  <script src="/js/requests-management.js?v=NAV1B4D2"></script>
+
+</body>
+</html>
